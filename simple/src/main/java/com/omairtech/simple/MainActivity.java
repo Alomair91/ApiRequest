@@ -96,39 +96,39 @@ public class MainActivity extends BaseActivity{
 
 
     @Override
-    public void onServerResponse(String response) {
-        Log.d("OnServerResponse", response);
+    public void onApiRequestResponse(String response) {
+        Log.d("OnApiRequestResponse", response);
         txt_result.setText(response);
     }
 
     @Override
-    public void onServerResponse(JSONObject jsonObject) {
-        Log.d("OnServerResponse", jsonObject.toString());
+    public void onApiRequestResponse(JSONObject jsonObject) {
+        Log.d("OnApiRequestResponse", jsonObject.toString());
         txt_result.setText(jsonObject.toString());
     }
 
 
     @Override
-    public void onServerResponse(String response, int tempId) {
-        Log.d("OnServerResponse", response);
+    public void onApiRequestResponse(String response, int tempId) {
+        Log.d("OnApiRequestResponse", response);
         txt_result.setText(response);
     }
 
     @Override
-    public void onServerResponse(JSONObject jsonObject, int tempId) {
-        Log.d("OnServerResponse", jsonObject.toString());
+    public void onApiRequestResponse(JSONObject jsonObject, int tempId) {
+        Log.d("OnApiRequestResponse", jsonObject.toString());
         txt_result.setText(jsonObject.toString());
     }
 
     @Override
-    public void onServerError(String message) {
-        Log.d("OnServerError", message + " ");
+    public void onApiRequestError(String message) {
+        Log.d("OnApiRequestError", message + " ");
         txt_result.setText(message);
     }
 
     @Override
-    public void onServerError(String message, int tempId) {
-        Log.d("OnServerError", message + " ");
+    public void onApiRequestError(String message, int tempId) {
+        Log.d("OnApiRequestError", message + " ");
         txt_result.setText(message);
     }
 

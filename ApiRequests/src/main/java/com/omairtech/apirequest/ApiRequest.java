@@ -203,9 +203,9 @@ public class ApiRequest extends BaseHelper {
         if (showProgress) hideProgressDialog();
         if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiRequestInterface.onServerResponse(response, tempId);
+                apiRequestInterface.onApiRequestResponse(response, tempId);
             else
-                apiRequestInterface.onServerResponse(response);
+                apiRequestInterface.onApiRequestResponse(response);
         }
     }
 
@@ -215,9 +215,9 @@ public class ApiRequest extends BaseHelper {
 
         if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiRequestInterface.onServerResponse(jsonObject, tempId);
+                apiRequestInterface.onApiRequestResponse(jsonObject, tempId);
             else
-                apiRequestInterface.onServerResponse(jsonObject);
+                apiRequestInterface.onApiRequestResponse(jsonObject);
         }
     }
 
@@ -227,9 +227,9 @@ public class ApiRequest extends BaseHelper {
 
         if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiRequestInterface.onServerError(volleyError.getMessage(), tempId);
+                apiRequestInterface.onApiRequestError(volleyError.getMessage(), tempId);
             else
-                apiRequestInterface.onServerError(volleyError.getMessage());
+                apiRequestInterface.onApiRequestError(volleyError.getMessage());
         }
 
         if (resendAgain && !activity.isFinishing()) {
