@@ -72,4 +72,4 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
-[![](https://jitpack.io/v/Alomair91/SQLiteDB.svg)](https://jitpack.io/#Alomair91/ApiRequest)
+[![](https://jitpack.io/v/Alomair91/ApiRequest.svg)](https://jitpack.io/#Alomair91/ApiRequest)
