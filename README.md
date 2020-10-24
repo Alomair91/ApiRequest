@@ -48,7 +48,7 @@ To get a Git project into your build:
 How to use it?
 -------
 
-- Will write it soon as possible ...
+- Please follow the simple project ...
 
 
 Contributors:
