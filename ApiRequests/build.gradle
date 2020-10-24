@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.omairtech'
-version = '1.03'
+version = '1.04'
 
 android {
     compileSdkVersion 30
@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.04"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
