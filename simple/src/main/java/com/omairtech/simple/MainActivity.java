@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity{
     private void getDataFromServerEx2() {
         ApiRequest apiRequest = new ApiRequest(this);
 
-        apiRequest.setApiInterface(this);
+        apiRequest.setApiRequestInterface(this);
         apiRequest.setRequestMethod(ApiRequest.GET);
         apiRequest.setInitialTimeoutMs(ApiRequest.initialTimeoutMs50C);
 
@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity{
     private void postDataFromServerEx1() {
         ApiRequest apiRequest = new ApiRequest(this);
 
-        apiRequest.setApiInterface(this);
+        apiRequest.setApiRequestInterface(this);
         apiRequest.setRequestMethod(ApiRequest.POST);
 
         Map<String, String> headersParams = new Hashtable<>();

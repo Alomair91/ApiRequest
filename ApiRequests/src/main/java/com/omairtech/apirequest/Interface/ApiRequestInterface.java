@@ -2,7 +2,7 @@ package com.omairtech.apirequest.Interface;
 
 import org.json.JSONObject;
 
-public interface ApiInterface {
+public interface ApiRequestInterface {
 
     default void onServerResponse(String response) {
     }

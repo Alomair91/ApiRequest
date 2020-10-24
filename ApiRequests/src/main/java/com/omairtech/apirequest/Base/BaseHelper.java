@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.util.Log;
 
-import com.omairtech.apirequest.Interface.ApiInterface;
+import com.omairtech.apirequest.Interface.ApiRequestInterface;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -26,7 +26,7 @@ public class BaseHelper {
 
 
     public Activity activity;
-    public ApiInterface apiInterface;
+    public ApiRequestInterface apiRequestInterface;
     public int requestMethod;
 
     public String url;
@@ -43,8 +43,8 @@ public class BaseHelper {
     public String tag;
 
 
-    public void setApiInterface(ApiInterface apiInterface) {
-        this.apiInterface = apiInterface;
+    public void setApiRequestInterface(ApiRequestInterface apiRequestInterface) {
+        this.apiRequestInterface = apiRequestInterface;
     }
 
     public void setRequestMethod(int requestMethod) {

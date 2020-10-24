@@ -7,7 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.omairtech.apirequest.Interface.ApiInterface;
+import com.omairtech.apirequest.Interface.ApiRequestInterface;
 import com.omairtech.apirequest.Base.BaseHelper;
 import com.omairtech.apirequest.volley.VolleyJSONRequest;
 import com.omairtech.apirequest.volley.VolleyStringRequest;
@@ -24,51 +24,51 @@ public class ApiRequest extends BaseHelper {
     }
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url) {
 
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
     }
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       HashMap<String, String> header) {
 
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.header = header;
     }
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       Map<String, String> params) {
 
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.params = params;
     }
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       HashMap<String, String> header,
                       Map<String, String> params) {
 
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.header = header;
@@ -76,14 +76,14 @@ public class ApiRequest extends BaseHelper {
     }
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       HashMap<String, String> header,
                       Map<String, String> params,
                       boolean showProgress) {
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.header = header;
@@ -93,7 +93,7 @@ public class ApiRequest extends BaseHelper {
 
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       HashMap<String, String> header,
@@ -101,7 +101,7 @@ public class ApiRequest extends BaseHelper {
                       boolean showProgress,
                       int tempId) {
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.header = header;
@@ -112,14 +112,14 @@ public class ApiRequest extends BaseHelper {
 
 
     public ApiRequest(Activity activity,
-                      ApiInterface apiInterface,
+                      ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url,
                       HashMap<String, String> header,
                       Map<String, String> params,
                       int initialTimeoutMs) {
         this.activity = activity;
-        this.apiInterface = apiInterface;
+        this.apiRequestInterface = apiRequestInterface;
         this.requestMethod = requestMethod;
         this.url = url;
         this.header = header;
@@ -201,11 +201,11 @@ public class ApiRequest extends BaseHelper {
     private void getStringResponse(String response) {
         showLogMessage(LOG, response);
         if (showProgress) hideProgressDialog();
-        if (apiInterface != null) {
+        if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiInterface.onServerResponse(response, tempId);
+                apiRequestInterface.onServerResponse(response, tempId);
             else
-                apiInterface.onServerResponse(response);
+                apiRequestInterface.onServerResponse(response);
         }
     }
 
@@ -213,11 +213,11 @@ public class ApiRequest extends BaseHelper {
         showLogMessage(LOG, jsonObject.toString());
         if (showProgress) hideProgressDialog();
 
-        if (apiInterface != null) {
+        if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiInterface.onServerResponse(jsonObject, tempId);
+                apiRequestInterface.onServerResponse(jsonObject, tempId);
             else
-                apiInterface.onServerResponse(jsonObject);
+                apiRequestInterface.onServerResponse(jsonObject);
         }
     }
 
@@ -225,11 +225,11 @@ public class ApiRequest extends BaseHelper {
         showLogMessage(LOG, volleyError.toString());
         if (showProgress) hideProgressDialog();
 
-        if (apiInterface != null) {
+        if (apiRequestInterface != null) {
             if (tempId != 0)
-                apiInterface.onServerError(volleyError.getMessage(), tempId);
+                apiRequestInterface.onServerError(volleyError.getMessage(), tempId);
             else
-                apiInterface.onServerError(volleyError.getMessage());
+                apiRequestInterface.onServerError(volleyError.getMessage());
         }
 
         if (resendAgain && !activity.isFinishing()) {

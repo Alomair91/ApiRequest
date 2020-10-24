@@ -1,15 +1,14 @@
 package com.omairtech.simple.base;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.omairtech.simple.Utils.ApiLink;
 import com.omairtech.simple.Utils.Helper;
-import com.omairtech.apirequest.Interface.ApiInterface;
+import com.omairtech.apirequest.Interface.ApiRequestInterface;
 
-public class BaseDialog extends DialogFragment implements ApiInterface {
+public class BaseDialog extends DialogFragment implements ApiRequestInterface {
     protected ApiLink apiLink;
 
 

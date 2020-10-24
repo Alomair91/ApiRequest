@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.omairtech.simple.Utils.ApiLink;
 import com.omairtech.simple.Utils.Helper;
-import com.omairtech.apirequest.Interface.ApiInterface;
+import com.omairtech.apirequest.Interface.ApiRequestInterface;
 
 @SuppressLint("Registered")
-public class BaseActivity extends AppCompatActivity implements ApiInterface {
+public class BaseActivity extends AppCompatActivity implements ApiRequestInterface {
     protected ApiLink apiLink;
 
     @Override
