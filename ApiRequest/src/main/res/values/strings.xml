@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="please_check_your_connection_and_try_again">Please check your connection and try again</string>
+    <string name="loading">Loading …</string>
+    <string name="connection_error_please_try_again">Connection error please try again</string>
+    <string name="connect">Connect</string>
+</resources>
