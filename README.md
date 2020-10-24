@@ -41,7 +41,7 @@ To get a Git project into your build:
         <dependency>
             <groupId>com.github.Alomair91</groupId>
             <artifactId>ApiRequest</artifactId>
-            <version>1.0</version>
+            <version>1.06</version>
         </dependency>
 	
 
