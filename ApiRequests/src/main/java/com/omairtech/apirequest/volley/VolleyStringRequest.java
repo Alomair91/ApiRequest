@@ -19,25 +19,45 @@ public class VolleyStringRequest extends StringRequest {
     private Map<String, String> headers = new Hashtable<>();
     private Map<String, String> params = new Hashtable<>();
 
-    private int initialTimeoutMs;
-    private String tag;
+    private final int initialTimeoutMs;
+    private final String tag;
 
+    /**
+     * Creates a new request.
+     *
+     * @param method the HTTP method to use
+     * @param url URL to fetch the JSON from
+     *     parameters will be posted along with request.
+     * @param listener Listener to receive the JSON response
+     * @param errorListener Error listener, or null to ignore errors.
+     */
     public VolleyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs,String tag) {
+            , int initialTimeoutMs,String tag, Map<String, String> headers) {
         super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
+        this.headers = headers;
 
         setDefaults();
     }
 
+    /**
+     * Creates a new request.
+     *
+     * @param method the HTTP method to use
+     * @param url URL to fetch the JSON from
+     *     parameters will be posted along with request.
+     * @param listener Listener to receive the JSON response
+     * @param errorListener Error listener, or null to ignore errors.
+     */
     public VolleyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs,String tag, Map<String, String> params) {
+            , int initialTimeoutMs,String tag, Map<String, String> headers, Map<String, String> params) {
         super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
+        this.headers = headers;
         this.params = params;
 
         setDefaults();

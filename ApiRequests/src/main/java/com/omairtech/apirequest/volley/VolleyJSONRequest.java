@@ -19,26 +19,48 @@ public class VolleyJSONRequest extends JsonObjectRequest {
     private Map<String, String> headers = new Hashtable<>();
     private Map<String, String> params = new Hashtable<>();
 
-    private int initialTimeoutMs;
-    private String tag;
+    private final int initialTimeoutMs;
+    private final String tag;
 
+    /**
+     * Creates a new request.
+     *
+     * @param method        the HTTP method to use
+     * @param url           URL to fetch the JSON from
+     *                      parameters will be posted along with request.
+     * @param listener      Listener to receive the JSON response
+     * @param errorListener Error listener, or null to ignore errors.
+     */
     public VolleyJSONRequest(int method, String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs, String tag) {
-        super(method, url, null, listener, errorListener);
+            , int initialTimeoutMs, String tag, Map<String, String> headers) {
+        super(method, url, new JSONObject(), listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
+        this.headers = headers;
 
         Log.d("SERVER_URL", method + " " + url);
         setDefaults();
     }
 
+    /**
+     * Creates a new request.
+     *
+     * @param method        the HTTP method to use
+     * @param url           URL to fetch the JSON from
+     *                      parameters will be posted along with request.
+     * @param params        A {@link JSONObject} to post with the request. Null indicates no
+     *                      parameters will be posted along with request.
+     * @param listener      Listener to receive the JSON response
+     * @param errorListener Error listener, or null to ignore errors.
+     */
     public VolleyJSONRequest(int method, String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs, String tag, Map<String, String> params) {
-        super(method, url, new JSONObject(params), listener, errorListener);
+            , int initialTimeoutMs, String tag, Map<String, String> headers, Map<String, String> params) {
+        super(method, url, new JSONObject(params != null ? params : new Hashtable<>()), listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
+        this.headers = headers;
         this.params = params;
 
         Log.d("SERVER_URL", method + " " + url);
