@@ -24,6 +24,13 @@ public class ApiRequest extends BaseHelper {
     }
 
     public ApiRequest(Activity activity,
+                      ApiRequestInterface apiRequestInterface) {
+
+        this.activity = activity;
+        this.apiRequestInterface = apiRequestInterface;
+    }
+
+    public ApiRequest(Activity activity,
                       ApiRequestInterface apiRequestInterface,
                       int requestMethod,
                       String url) {

@@ -35,7 +35,7 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 
     public VolleyJSONRequest(int method, String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener
             , int initialTimeoutMs, String tag, Map<String, String> params) {
-        super(method, url, null, listener, errorListener);
+        super(method, url, new JSONObject(params), listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;

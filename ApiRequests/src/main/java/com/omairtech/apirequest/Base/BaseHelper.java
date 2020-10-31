@@ -10,7 +10,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class BaseHelper {
-    public static final String LOG = "ServerHelper";
+    public static final String LOG = "ApiRequest";
 
     public static final int GET = 1;
     public static final int POST = 2;
@@ -33,7 +33,7 @@ public class BaseHelper {
     public Map<String, String> params = new Hashtable<>();
     public Map<String, String> header = new Hashtable<>();
 
-    public int requestType = REQUEST_TYPE_STRING;
+    public int requestType = REQUEST_TYPE_JSON;
     public int initialTimeoutMs = initialTimeoutMs50C;
 
     public boolean showProgress = true;
@@ -67,7 +67,7 @@ public class BaseHelper {
      * Type of request
      *
      * @param requestType type of request
-     * @apiNote REQUEST_TYPE_STRING is the default
+     * @apiNote REQUEST_TYPE_JSON is the default
      */
     public void setRequestType(int requestType) {
         this.requestType = requestType;
