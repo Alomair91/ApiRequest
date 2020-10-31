@@ -175,13 +175,13 @@ public class ApiRequest extends BaseHelper {
 
         if (requestType == REQUEST_TYPE_STRING) {
             VolleyStringRequest stringRequest = new VolleyStringRequest(Request.Method.GET, url
-                    , this::getStringResponse, this::getError, initialTimeoutMs, tag);
+                    , this::getStringResponse, this::getError, initialTimeoutMs, tag,header);
             //Adding request to the queue
             requestQueue.add(stringRequest);
 
         } else {
             VolleyJSONRequest jsonRequest = new VolleyJSONRequest(Request.Method.GET, url
-                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag);
+                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag,header);
             //Adding request to the queue
             requestQueue.add(jsonRequest);
         }
@@ -192,13 +192,13 @@ public class ApiRequest extends BaseHelper {
         if (requestQueue == null) requestQueue = Volley.newRequestQueue(activity);
         if (requestType == REQUEST_TYPE_STRING) {
             VolleyStringRequest stringRequest = new VolleyStringRequest(Request.Method.POST, url
-                    , this::getStringResponse, this::getError, initialTimeoutMs, tag, params);
+                    , this::getStringResponse, this::getError, initialTimeoutMs, tag,header, params);
 
             //Adding request to the queue
             requestQueue.add(stringRequest);
         } else {
             VolleyJSONRequest jsonRequest = new VolleyJSONRequest(Request.Method.POST, url
-                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag, params);
+                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag,header, params);
             jsonRequest.setTag(tag);
             //Adding request to the queue
             requestQueue.add(jsonRequest);
@@ -209,10 +209,9 @@ public class ApiRequest extends BaseHelper {
         showLogMessage(LOG, response);
         if (showProgress) hideProgressDialog();
         if (apiRequestInterface != null) {
+            apiRequestInterface.onApiRequestResponse(response);
             if (tempId != 0)
                 apiRequestInterface.onApiRequestResponse(response, tempId);
-            else
-                apiRequestInterface.onApiRequestResponse(response);
         }
     }
 
@@ -221,10 +220,9 @@ public class ApiRequest extends BaseHelper {
         if (showProgress) hideProgressDialog();
 
         if (apiRequestInterface != null) {
+            apiRequestInterface.onApiRequestResponse(jsonObject);
             if (tempId != 0)
                 apiRequestInterface.onApiRequestResponse(jsonObject, tempId);
-            else
-                apiRequestInterface.onApiRequestResponse(jsonObject);
         }
     }
 
@@ -233,10 +231,9 @@ public class ApiRequest extends BaseHelper {
         if (showProgress) hideProgressDialog();
 
         if (apiRequestInterface != null) {
+            apiRequestInterface.onApiRequestError(volleyError.getMessage());
             if (tempId != 0)
                 apiRequestInterface.onApiRequestError(volleyError.getMessage(), tempId);
-            else
-                apiRequestInterface.onApiRequestError(volleyError.getMessage());
         }
 
         if (resendAgain && !activity.isFinishing()) {
