@@ -22,7 +22,7 @@ To get a Git project into your build:
 - Step 2. Add the dependency
 
         dependencies {
-            implementation 'com.github.Alomair91:ApiRequest:1.06'
+            implementation 'com.github.Alomair91:ApiRequest:1.09'
         }
 
 
