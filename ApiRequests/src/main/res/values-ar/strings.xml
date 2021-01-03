@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="please_check_your_connection_and_try_again">خطأ في الاتصال، يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.</string>
+    <string name="loading">جاري التحميل …</string>
+    <string name="connection_error_please_try_again">خطأ في الاتصال! يرجى المحاولة مرة أخرى</string>
+    <string name="connect">اتصال</string>
+</resources>

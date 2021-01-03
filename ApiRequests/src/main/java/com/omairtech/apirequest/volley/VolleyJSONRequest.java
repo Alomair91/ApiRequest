@@ -1,7 +1,5 @@
 package com.omairtech.apirequest.volley;
 
-import android.util.Log;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -16,7 +14,7 @@ import java.util.Map;
 
 public class VolleyJSONRequest extends JsonObjectRequest {
 
-    private Map<String, String> headers = new Hashtable<>();
+    private Map<String, String> headers;
     private Map<String, String> params = new Hashtable<>();
 
     private final int initialTimeoutMs;
@@ -39,7 +37,6 @@ public class VolleyJSONRequest extends JsonObjectRequest {
         this.tag = tag;
         this.headers = headers;
 
-        Log.d("SERVER_URL", method + " " + url);
         setDefaults();
     }
 
@@ -63,7 +60,6 @@ public class VolleyJSONRequest extends JsonObjectRequest {
         this.headers = headers;
         this.params = params;
 
-        Log.d("SERVER_URL", method + " " + url);
         setDefaults();
     }
 
@@ -79,13 +75,15 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() /*throws AuthFailureError*/ {
-        Log.d("HEADER_PARAMS", headers.toString());
+        if(headers == null)
+            headers = new Hashtable<>();
         return headers;
     }
 
     @Override
     protected Map<String, String> getParams()/* throws AuthFailureError*/ {
-        Log.d("BODY_PARAMS", params.toString());
+        if(params == null)
+            params = new Hashtable<>();
         return params;
     }
 
@@ -100,7 +98,6 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 
     @Override
     protected VolleyError parseNetworkError(VolleyError volleyError) {
-        Log.e("TAG", "volleyError " + volleyError.getMessage());
         return super.parseNetworkError(volleyError);
     }
 
@@ -111,8 +108,6 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 //        try {
 //            String expire = response.headers.get("expires");
 //            String date = response.headers.get("Date");
-//            Log.e("TAG", "parseNetworkResponse expire " + expire);
-//            Log.e("TAG", "parseNetworkResponse date " + date);
 //            if (expire != null && expire.length() < 3) {
 //                response.headers.put("expires", date);
 //            }

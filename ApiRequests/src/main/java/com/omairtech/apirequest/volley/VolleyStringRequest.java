@@ -1,7 +1,5 @@
 package com.omairtech.apirequest.volley;
 
-import android.util.Log;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -16,7 +14,7 @@ import java.util.Map;
 
 public class VolleyStringRequest extends StringRequest {
 
-    private Map<String, String> headers = new Hashtable<>();
+    private Map<String, String> headers;
     private Map<String, String> params = new Hashtable<>();
 
     private final int initialTimeoutMs;
@@ -75,11 +73,15 @@ public class VolleyStringRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() /*throws AuthFailureError*/ {
+        if(headers == null)
+            headers = new Hashtable<>();
         return headers;
     }
 
     @Override
     protected Map<String, String> getParams()/* throws AuthFailureError*/ {
+        if(params == null)
+            params = new Hashtable<>();
         return params;
     }
 
@@ -94,7 +96,6 @@ public class VolleyStringRequest extends StringRequest {
 
     @Override
     protected VolleyError parseNetworkError(VolleyError volleyError) {
-        Log.e("TAG", "volleyError " + volleyError.getMessage());
         return super.parseNetworkError(volleyError);
     }
 
@@ -105,8 +106,6 @@ public class VolleyStringRequest extends StringRequest {
 //        try {
 //            String expire = response.headers.get("expires");
 //            String date = response.headers.get("Date");
-//            Log.e("TAG", "parseNetworkResponse expire " + expire);
-//            Log.e("TAG", "parseNetworkResponse date " + date);
 //            if (expire != null && expire.length() < 3) {
 //                response.headers.put("expires", date);
 //            }

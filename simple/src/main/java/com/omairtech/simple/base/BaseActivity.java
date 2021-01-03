@@ -2,46 +2,51 @@ package com.omairtech.simple.base;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.omairtech.simple.Utils.ApiLink;
-import com.omairtech.simple.Utils.Helper;
-import com.omairtech.apirequest.Interface.ApiRequestInterface;
+import com.omairtech.simple.Util.ApiLink;
+import com.omairtech.apirequest.Interface.ApiRequestListener;
+import com.omairtech.simple.Util.Utils;
+
+import org.json.JSONObject;
 
 @SuppressLint("Registered")
-public class BaseActivity extends AppCompatActivity implements ApiRequestInterface {
+public class BaseActivity extends AppCompatActivity implements ApiRequestListener {
+    protected Utils util;
     protected ApiLink apiLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        util = Utils.getInstance(getApplication());
         apiLink = new ApiLink();
     }
 
-    public boolean isInternetAvailable() {
-        return Helper.isInternetAvailable(this) && apiLink != null;
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
-    protected void showAlertDialog(String message) {
-        Helper.showAlert(this, message);
+    /**
+     * Process data that does not need to be displayed on screen here
+     *
+     * @param response String
+     */
+    @Override
+    public void onApiRequestResponse(String response) {
+        util.showLogMessage("OnApiRequestResponse", response);
     }
 
-    protected void showAlertDialog(int messageId) {
-        showAlertDialog(getString(messageId));
-    }
-
-
-    public void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    public void showToast(int messageId) {
-        Toast.makeText(this, messageId, Toast.LENGTH_LONG).show();
-    }
-
-    public void showLogMessage(String tag, String message) {
-        Helper.showLogMessage(tag, message);
+    /**
+     * Process errors that does not need to be displayed on screen here
+     *
+     * @param message String
+     */
+    @Override
+    public void onApiRequestError(String message) {
+        util.showLogMessage("onApiRequestError", message);
     }
 }

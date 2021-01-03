@@ -6,49 +6,37 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:padding="40dp"
-    tools:context=".MainActivity">
+    tools:context=".activity.GetActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
+        <EditText
+            android:id="@+id/txt_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:onClick="getEx"
-            android:text="GET"
-            android:textSize="18sp"
-            tools:ignore="ButtonStyle,HardcodedText" />
+            android:hint="API Url"
+            android:inputType="textUri"
+            tools:ignore="Autofill,HardcodedText" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:onClick="postEx"
-            android:text="POST"
-            android:textSize="18sp"
+            android:onClick="onBtnClicked"
+            android:text="GO"
+            android:textSize="12sp"
             tools:ignore="ButtonStyle,HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:onClick="putEx"
-            android:text="PUT"
-            android:textSize="18sp"
-            tools:ignore="ButtonStyle,HardcodedText" />
 
-        <Button
+        <TextView
+            android:id="@+id/txt_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:onClick="deleteEx"
-            android:text="DELETE"
-            android:textSize="18sp"
-            tools:ignore="ButtonStyle,HardcodedText" />
+            android:layout_margin="10dp" />
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

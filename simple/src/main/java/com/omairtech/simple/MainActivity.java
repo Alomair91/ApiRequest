@@ -1,135 +1,35 @@
 package com.omairtech.simple;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
+import com.omairtech.simple.activity.DeleteActivity;
+import com.omairtech.simple.activity.GetActivity;
+import com.omairtech.simple.activity.PostActivity;
 import com.omairtech.simple.base.BaseActivity;
-import com.omairtech.apirequest.ApiRequest;
 
-import org.json.JSONObject;
-
-import java.util.Hashtable;
-import java.util.Map;
-
-public class MainActivity extends BaseActivity{
-
-    private EditText txt_url;
-    private TextView txt_result;
-
+public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txt_url = findViewById(R.id.txt_url);
-        txt_result = findViewById(R.id.txt_result);
-
-        txt_url.setText(apiLink.get(0));
     }
 
-    private boolean checkTextUrl() {
-        return !txt_url.getText().toString().isEmpty();
+    public void getEx(View view) {
+        startActivity(new Intent(this, GetActivity.class));
     }
 
-    // Get Data ================================================================
-    public void getDataFromApi(View view) {
-        if (checkTextUrl())
-            getDataFromServerEx1();
-        // getDataFromServerEx2();
+    public void postEx(View view) {
+        startActivity(new Intent(this, PostActivity.class));
     }
 
-    private void getDataFromServerEx1() {
-        new ApiRequest(this, this, ApiRequest.GET, txt_url.getText().toString()).execute();
-    }
-    private void getDataFromServerEx2() {
-        ApiRequest apiRequest = new ApiRequest(this);
-
-        apiRequest.setApiRequestInterface(this);
-        apiRequest.setRequestMethod(ApiRequest.GET);
-        apiRequest.setInitialTimeoutMs(ApiRequest.initialTimeoutMs50C);
-
-        Map<String, String> headers = new Hashtable<>();
-        headers.put("Authorization", "Bearer YOUR_TOKEN");
-        apiRequest.setHeaderParams(headers);
-
-        apiRequest.setRequestType(ApiRequest.REQUEST_TYPE_JSON);
-        apiRequest.setShowProgressDialog(false);
-        apiRequest.setUrl(txt_url.getText().toString());
-        apiRequest.setTempId(1);
-
-        apiRequest.execute();
+    public void putEx(View view) {
+        startActivity(new Intent(this, PostActivity.class));
     }
 
-
-    // Post Data ================================================================
-    public void postDataFromApi(View view) {
-        postDataFromServerEx1();
+    public void deleteEx(View view) {
+        startActivity(new Intent(this, DeleteActivity.class));
     }
-    private void postDataFromServerEx1() {
-        ApiRequest apiRequest = new ApiRequest(this);
-
-        apiRequest.setApiRequestInterface(this);
-        apiRequest.setRequestMethod(ApiRequest.POST);
-
-        Map<String, String> headersParams = new Hashtable<>();
-        headersParams.put("Authorization", "Bearer YOUR_TOKEN");
-        apiRequest.setHeaderParams(headersParams);
-
-        Map<String, String> bodyParams = new Hashtable<>();
-        bodyParams.put("email", "test@test.com");
-        bodyParams.put("password", "123456");
-        apiRequest.setBodyParams(bodyParams);
-
-        apiRequest.setRequestType(ApiRequest.REQUEST_TYPE_JSON);
-        apiRequest.setShowProgressDialog(true);
-        apiRequest.setUrl(txt_url.getText().toString());
-
-        apiRequest.setShowResendAgainDialog(false);
-        apiRequest.setShowLog(true);
-
-        apiRequest.execute();
-    }
-
-
-
-    @Override
-    public void onApiRequestResponse(String response) {
-        Log.d("OnApiRequestResponse", response);
-        txt_result.setText(response);
-    }
-
-    @Override
-    public void onApiRequestResponse(JSONObject jsonObject) {
-        Log.d("OnApiRequestResponse", jsonObject.toString());
-        txt_result.setText(jsonObject.toString());
-    }
-
-
-    @Override
-    public void onApiRequestResponse(String response, int tempId) {
-        Log.d("OnApiRequestResponse", response);
-        txt_result.setText(response);
-    }
-
-    @Override
-    public void onApiRequestResponse(JSONObject jsonObject, int tempId) {
-        Log.d("OnApiRequestResponse", jsonObject.toString());
-        txt_result.setText(jsonObject.toString());
-    }
-
-    @Override
-    public void onApiRequestError(String message) {
-        Log.d("OnApiRequestError", message + " ");
-        txt_result.setText(message);
-    }
-
-    @Override
-    public void onApiRequestError(String message, int tempId) {
-        Log.d("OnApiRequestError", message + " ");
-        txt_result.setText(message);
-    }
-
 }

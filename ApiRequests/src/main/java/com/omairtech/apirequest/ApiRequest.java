@@ -7,8 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.omairtech.apirequest.Interface.ApiRequestInterface;
+import com.omairtech.apirequest.Interface.ApiRequestListener;
 import com.omairtech.apirequest.Base.BaseHelper;
+import com.omairtech.apirequest.enums.RequestType;
+import com.omairtech.apirequest.enums.ResponseType;
 import com.omairtech.apirequest.volley.VolleyJSONRequest;
 import com.omairtech.apirequest.volley.VolleyStringRequest;
 
@@ -20,142 +22,150 @@ import java.util.Map;
 public class ApiRequest extends BaseHelper {
 
     public ApiRequest(Activity activity) {
-        this.activity = activity;
+        setActivity(activity);
     }
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface) {
-
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
+                      ApiRequestListener listener) {
+        setActivity(activity);
+        setListener(listener);
     }
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType) {
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+    }
+
+    public ApiRequest(Activity activity,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url) {
-
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
     }
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url,
                       HashMap<String, String> header) {
 
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.header = header;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setHeaderParams(header);
     }
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url,
-                      Map<String, String> params) {
+                      Map<String, String> body) {
 
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.params = params;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setBodyParams(body);
     }
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
-                      String url,
-                      HashMap<String, String> header,
-                      Map<String, String> params) {
-
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.header = header;
-        this.params = params;
-    }
-
-    public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url,
                       HashMap<String, String> header,
-                      Map<String, String> params,
+                      Map<String, String> body) {
+
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setHeaderParams(header);
+        setBodyParams(body);
+    }
+
+    public ApiRequest(Activity activity,
+                      ApiRequestListener listener,
+                      RequestType requestType,
+                      String url,
+                      HashMap<String, String> header,
+                      Map<String, String> body,
                       boolean showProgress) {
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.header = header;
-        this.params = params;
-        this.showProgress = showProgress;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setHeaderParams(header);
+        setBodyParams(body);
+        setShowProgressDialog(showProgress);
     }
 
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url,
                       HashMap<String, String> header,
-                      Map<String, String> params,
+                      Map<String, String> body,
                       boolean showProgress,
                       int tempId) {
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.header = header;
-        this.params = params;
-        this.showProgress = showProgress;
-        this.tempId = tempId;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setHeaderParams(header);
+        setBodyParams(body);
+        setShowProgressDialog(showProgress);
+        setTempId(tempId);
     }
 
 
     public ApiRequest(Activity activity,
-                      ApiRequestInterface apiRequestInterface,
-                      int requestMethod,
+                      ApiRequestListener listener,
+                      RequestType requestType,
                       String url,
                       HashMap<String, String> header,
-                      Map<String, String> params,
+                      Map<String, String> body,
                       int initialTimeoutMs) {
-        this.activity = activity;
-        this.apiRequestInterface = apiRequestInterface;
-        this.requestMethod = requestMethod;
-        this.url = url;
-        this.header = header;
-        this.params = params;
-        this.initialTimeoutMs = initialTimeoutMs;
+        setActivity(activity);
+        setListener(listener);
+        setRequestType(requestType);
+        setUrl(url);
+        setHeaderParams(header);
+        setBodyParams(body);
+        setInitialTimeoutMs(initialTimeoutMs);
     }
 
     public void execute() {
-        showLogMessage(LOG, "Request type: " + requestType);
-        showLogMessage(LOG, "Request method: " + requestMethod);
-        showLogMessage(LOG, "url: " + url);
-        showLogMessage(LOG, "Header: " + header.toString());
-        showLogMessage(LOG, "Body: " + params.toString());
+        if (isShowLog()) {
+            showLogMessage("Request type: " + getRequestType());
+            showLogMessage("Response type: " + getResponseType());
+            showLogMessage("URL: " + getUrl());
+            showLogMessage("Header params: " + getHeaderParams().toString());
+            showLogMessage("Body params: " + getBodyParams().toString());
+        }
 
-        if (showProgress)
-            showProgressDialog(R.string.loading);
-
-
-        switch (requestMethod) {
+        showProgressDialog(R.string.loading);
+        switch (getRequestType()) {
             case POST:
-                postDataToServer();
-                params.put("_method", "post");
-                break;
             case PUT:
-                params.put("_method", "put");
-                postDataToServer();
-                break;
             case DELETE:
-                params.put("_method", "delete");
+                if (isSetPUTAndDELETEAsPOST()) {
+                    Map<String, String> bodyParams = getBodyParams();
+                    if (getRequestType() == RequestType.POST)
+                        bodyParams.put("_method", "post");
+                    else if (getRequestType() == RequestType.PUT)
+                        bodyParams.put("_method", "put");
+                    else if (getRequestType() == RequestType.DELETE)
+                        bodyParams.put("_method", "delete");
+                    setBodyParams(bodyParams);
+                }
                 postDataToServer();
                 break;
             case GET:
@@ -168,77 +178,97 @@ public class ApiRequest extends BaseHelper {
 
     private static RequestQueue requestQueue;
 
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null)
+            //Creating a Request Queue
+            requestQueue = Volley.newRequestQueue(getActivity());
+        return requestQueue;
+    }
+
     private void getDataFromServer() {
-
-        //Creating a Request Queue
-        if (requestQueue == null) requestQueue = Volley.newRequestQueue(activity);
-
-        if (requestType == REQUEST_TYPE_STRING) {
-            VolleyStringRequest stringRequest = new VolleyStringRequest(Request.Method.GET, url
-                    , this::getStringResponse, this::getError, initialTimeoutMs, tag,header);
+        if (getResponseType() == ResponseType.STRING) {
+            VolleyStringRequest stringRequest = new VolleyStringRequest(Request.Method.GET, getUrl()
+                    , this::getStringResponse, this::getError, getInitialTimeoutMs(), getTag(), getHeaderParams());
             //Adding request to the queue
-            requestQueue.add(stringRequest);
+            getRequestQueue().add(stringRequest);
 
         } else {
-            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(Request.Method.GET, url
-                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag,header);
+            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(Request.Method.GET, getUrl()
+                    , this::getJSONResponse, this::getError, getInitialTimeoutMs(), getTag(), getHeaderParams());
             //Adding request to the queue
-            requestQueue.add(jsonRequest);
+            getRequestQueue().add(jsonRequest);
         }
     }
 
     private void postDataToServer() {
-        //Creating a Request Queue
-        if (requestQueue == null) requestQueue = Volley.newRequestQueue(activity);
-        if (requestType == REQUEST_TYPE_STRING) {
-            VolleyStringRequest stringRequest = new VolleyStringRequest(Request.Method.POST, url
-                    , this::getStringResponse, this::getError, initialTimeoutMs, tag,header, params);
+        int requestMethod = Request.Method.POST;
+        if (isSetPUTAndDELETEAsPOST()) {
+            if (getRequestType() == RequestType.PUT)
+                requestMethod = Request.Method.PUT;
+            else if (getRequestType() == RequestType.DELETE)
+                requestMethod = Request.Method.DELETE;
+        }
 
+        if (getResponseType() == ResponseType.STRING) {
+            VolleyStringRequest stringRequest = new VolleyStringRequest(requestMethod, getUrl()
+                    , this::getStringResponse, this::getError, getInitialTimeoutMs(), getTag(), getHeaderParams(), getBodyParams());
             //Adding request to the queue
-            requestQueue.add(stringRequest);
+            getRequestQueue().add(stringRequest);
         } else {
-            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(Request.Method.POST, url
-                    , this::getJSONResponse, this::getError, initialTimeoutMs, tag,header, params);
-            jsonRequest.setTag(tag);
+            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(requestMethod, getUrl()
+                    , this::getJSONResponse, this::getError, getInitialTimeoutMs(), getTag(), getHeaderParams(), getBodyParams());
             //Adding request to the queue
-            requestQueue.add(jsonRequest);
+            getRequestQueue().add(jsonRequest);
         }
     }
 
     private void getStringResponse(String response) {
-        showLogMessage(LOG, response);
-        if (showProgress) hideProgressDialog();
-        if (apiRequestInterface != null) {
-            apiRequestInterface.onApiRequestResponse(response);
-            if (tempId != 0)
-                apiRequestInterface.onApiRequestResponse(response, tempId);
+        if (isShowLog())
+            showLogMessage(response);
+
+        if (isShowProgress())
+            hideProgressDialog();
+
+        if (getListener() != null) {
+            getListener().onApiRequestResponse(response);
+            if (getTempId() != 0)
+                getListener().onApiRequestResponse(response, getTempId());
         }
     }
 
     private void getJSONResponse(JSONObject jsonObject) {
-        showLogMessage(LOG, jsonObject.toString());
-        if (showProgress) hideProgressDialog();
+        if (isShowLog())
+            showLogMessage(jsonObject.toString());
 
-        if (apiRequestInterface != null) {
-            apiRequestInterface.onApiRequestResponse(jsonObject);
-            if (tempId != 0)
-                apiRequestInterface.onApiRequestResponse(jsonObject, tempId);
+        if (isShowProgress())
+            hideProgressDialog();
+
+        if (getListener() != null) {
+            getListener().onApiRequestResponse(jsonObject);
+            getListener().onApiRequestResponse(jsonObject.toString());
+            if (getTempId() != 0) {
+                getListener().onApiRequestResponse(jsonObject, getTempId());
+                getListener().onApiRequestResponse(jsonObject.toString(), getTempId());
+            }
         }
     }
 
     private void getError(VolleyError volleyError) {
-        showLogMessage(LOG, volleyError.toString());
-        if (showProgress) hideProgressDialog();
+        if (isShowLog())
+            showLogMessage(volleyError.getMessage());
 
-        if (apiRequestInterface != null) {
-            apiRequestInterface.onApiRequestError(volleyError.getMessage());
-            if (tempId != 0)
-                apiRequestInterface.onApiRequestError(volleyError.getMessage(), tempId);
+        if (isShowProgress())
+            hideProgressDialog();
+
+        if (getListener() != null) {
+            getListener().onApiRequestError(volleyError.toString());
+            if (getTempId() != 0)
+                getListener().onApiRequestError(volleyError.toString(), getTempId());
         }
 
-        if (resendAgain && !activity.isFinishing()) {
-            new AlertDialog.Builder(activity)
-                    .setMessage(activity.getString(R.string.connection_error_please_try_again))
+        if (isShowTryRequestAgain() && !getActivity().isFinishing()) {
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(getActivity().getString(R.string.connection_error_please_try_again))
                     .setCancelable(false)
                     .setPositiveButton(R.string.connect, (dialog, which) -> execute())
                     .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())

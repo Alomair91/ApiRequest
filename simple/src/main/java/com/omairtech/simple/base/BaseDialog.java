@@ -4,34 +4,38 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.omairtech.simple.Utils.ApiLink;
-import com.omairtech.simple.Utils.Helper;
-import com.omairtech.apirequest.Interface.ApiRequestInterface;
+import com.omairtech.simple.Util.ApiLink;
+import com.omairtech.apirequest.Interface.ApiRequestListener;
+import com.omairtech.simple.Util.Utils;
 
-public class BaseDialog extends DialogFragment implements ApiRequestInterface {
+public class BaseDialog extends DialogFragment implements ApiRequestListener {
+    protected Utils util;
     protected ApiLink apiLink;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        util = Utils.getInstance(getActivity().getApplication());
         apiLink = new ApiLink();
     }
 
-    public boolean isInternetAvailable() {
-        return Helper.isInternetAvailable(getActivity());
+    /**
+     * Process data that does not need to be displayed on screen here
+     *
+     * @param response String
+     */
+    @Override
+    public void onApiRequestResponse(String response) {
+        util.showLogMessage("OnApiRequestResponse", response);
     }
 
-    public void showAlertDialog(String message) {
-        Helper.showAlert(getContext(), message);
-    }
-
-    public void showAlertDialog(int messageId) {
-        showAlertDialog(getString(messageId));
-    }
-
-
-    public void showLogMessage(String tag, String message) {
-        Helper.showLogMessage(tag, message);
+    /**
+     * Process errors that does not need to be displayed on screen here
+     *
+     * @param message String
+     */
+    @Override
+    public void onApiRequestError(String message) {
+        util.showLogMessage("onApiRequestError", message);
     }
 }
