@@ -1,6 +1,5 @@
 package com.omairtech.simple.Util;
 
-import java.util.Date;
 
 public class ApiLink {
 

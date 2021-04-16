@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.omairtech.apirequest.model.NetworkResponse;
 import com.omairtech.simple.Util.ApiLink;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
 import com.omairtech.simple.Util.Utils;
+
+import org.json.JSONObject;
 
 public class BaseDialog extends DialogFragment implements ApiRequestListener {
     protected Utils util;
@@ -25,8 +28,13 @@ public class BaseDialog extends DialogFragment implements ApiRequestListener {
      * @param response String
      */
     @Override
-    public void onApiRequestResponse(String response) {
-        util.showLogMessage("OnApiRequestResponse", response);
+    public void onApiStringRequestResponse(NetworkResponse networkResponse, String response) {
+        util.showLogMessage("onApiStringRequestResponse", response);
+    }
+
+    @Override
+    public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject jsonObject) {
+        util.showLogMessage("onApiJSONRequestResponse", jsonObject.toString());
     }
 
     /**
@@ -35,7 +43,7 @@ public class BaseDialog extends DialogFragment implements ApiRequestListener {
      * @param message String
      */
     @Override
-    public void onApiRequestError(String message) {
+    public void onApiRequestError(NetworkResponse networkResponse, String message) {
         util.showLogMessage("onApiRequestError", message);
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.omairtech.apirequest.model.NetworkResponse;
 import com.omairtech.simple.Util.ApiLink;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
 import com.omairtech.simple.Util.Utils;
@@ -36,8 +37,13 @@ public class BaseActivity extends AppCompatActivity implements ApiRequestListene
      * @param response String
      */
     @Override
-    public void onApiRequestResponse(String response) {
-        util.showLogMessage("OnApiRequestResponse", response);
+    public void onApiStringRequestResponse(NetworkResponse networkResponse,String response) {
+        util.showLogMessage("onApiStringRequestResponse",networkResponse.statusCode +": "+ response);
+    }
+
+    @Override
+    public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject jsonObject) {
+        util.showLogMessage("onApiJSONRequestResponse", networkResponse.statusCode +": "+ jsonObject.toString());
     }
 
     /**
@@ -46,7 +52,7 @@ public class BaseActivity extends AppCompatActivity implements ApiRequestListene
      * @param message String
      */
     @Override
-    public void onApiRequestError(String message) {
-        util.showLogMessage("onApiRequestError", message);
+    public void onApiRequestError(NetworkResponse networkResponse, String message) {
+        util.showLogMessage("onApiRequestError", networkResponse.statusCode +": "+ message);
     }
 }

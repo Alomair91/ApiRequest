@@ -18,7 +18,7 @@ public class BaseHelper {
 
     private Activity activity;
     private ApiRequestListener listener;
-    private RequestType requestType;
+    private RequestType requestType = RequestType.GET;
 
     private String url;
     private Map<String, String> headerParams = new Hashtable<>();
@@ -31,7 +31,7 @@ public class BaseHelper {
     private int initialTimeoutMs = InitialTimeout.Time50Second;
 
     private boolean showProgress = true;
-    private boolean showTryRequestAgain = true;
+    private boolean showTryAgainIfFails = true;
     private boolean showLog = false;
 
     private boolean setPUTAndDELETEAsPOST = false;
@@ -170,11 +170,11 @@ public class BaseHelper {
      * Show dialog to ask user if he want to recall request again if request failed
      * @param tryRequestAgain boolean
      */
-    public void setShowTryRequestAgain(boolean tryRequestAgain) {
-        this.showTryRequestAgain = tryRequestAgain;
+    public void setShowTryAgainIfFails(boolean tryRequestAgain) {
+        this.showTryAgainIfFails = tryRequestAgain;
     }
-    public boolean isShowTryRequestAgain() {
-        return showTryRequestAgain;
+    public boolean isShowTryAgainIfFails() {
+        return showTryAgainIfFails;
     }
 
     /**

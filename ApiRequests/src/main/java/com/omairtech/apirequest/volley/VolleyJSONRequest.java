@@ -1,18 +1,31 @@
 package com.omairtech.apirequest.volley;
 
+import android.util.Log;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.Map;
 
 
 public class VolleyJSONRequest extends JsonObjectRequest {
+
+    public interface ResponseListener {
+        void onNetworkResponse(NetworkResponse response);
+    }
+
+    private ResponseListener responseListener = null;
 
     private Map<String, String> headers;
     private Map<String, String> params = new Hashtable<>();
@@ -29,13 +42,21 @@ public class VolleyJSONRequest extends JsonObjectRequest {
      * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyJSONRequest(int method, String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs, String tag, Map<String, String> headers) {
+    public VolleyJSONRequest(
+            int method,
+            String url,
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            int initialTimeoutMs,
+            String tag, Map<String,
+            String> headers,
+            ResponseListener responseListener) {
         super(method, url, new JSONObject(), listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
         this.headers = headers;
+        this.responseListener = responseListener;
 
         setDefaults();
     }
@@ -51,14 +72,22 @@ public class VolleyJSONRequest extends JsonObjectRequest {
      * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyJSONRequest(int method, String url, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs, String tag, Map<String, String> headers, Map<String, String> params) {
+    public VolleyJSONRequest(
+            int method,
+            String url,
+            Response.Listener<JSONObject> listener,
+            Response.ErrorListener errorListener,
+            int initialTimeoutMs,
+            String tag, Map<String, String> headers,
+            Map<String, String> params,
+            ResponseListener responseListener) {
         super(method, url, new JSONObject(params != null ? params : new Hashtable<>()), listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
         this.headers = headers;
         this.params = params;
+        this.responseListener = responseListener;
 
         setDefaults();
     }
@@ -75,14 +104,14 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() /*throws AuthFailureError*/ {
-        if(headers == null)
+        if (headers == null)
             headers = new Hashtable<>();
         return headers;
     }
 
     @Override
     protected Map<String, String> getParams()/* throws AuthFailureError*/ {
-        if(params == null)
+        if (params == null)
             params = new Hashtable<>();
         return params;
     }
@@ -114,6 +143,17 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        return super.parseNetworkResponse(response);
+        if (responseListener != null) {
+            responseListener.onNetworkResponse(response);
+        }
+        try {
+            String utf8String = new String(response.data, StandardCharsets.UTF_8);
+            return Response.success(new JSONObject(utf8String), HttpHeaderParser.parseCacheHeaders(response));
+        } catch (JSONException e) {
+            // log error
+            //return Response.error(new ParseError(e));
+            return super.parseNetworkResponse(response);
+        }
+        //return super.parseNetworkResponse(response);
     }
 }

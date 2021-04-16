@@ -9,6 +9,7 @@ import com.omairtech.apirequest.ApiRequest;
 import com.omairtech.apirequest.enums.InitialTimeout;
 import com.omairtech.apirequest.enums.RequestType;
 import com.omairtech.apirequest.enums.ResponseType;
+import com.omairtech.apirequest.model.NetworkResponse;
 import com.omairtech.simple.R;
 import com.omairtech.simple.base.BaseActivity;
 
@@ -69,7 +70,7 @@ public class PutActivity extends BaseActivity{
         request.setInitialTimeoutMs(InitialTimeout.Time50Second);
 
         request.setShowProgressDialog(true);
-        request.setShowTryRequestAgain(true);
+        request.setShowTryAgainIfFails(true);
         request.setShowLog(true);
 
         request.execute();
@@ -77,40 +78,41 @@ public class PutActivity extends BaseActivity{
 
 
 
+    // String =====================================================================================
     @Override
-    public void onApiRequestResponse(String response) {
-        super.onApiRequestResponse(response);
+    public void onApiStringRequestResponse(NetworkResponse networkResponse, String response) {
+        super.onApiStringRequestResponse(networkResponse, response);
         setToTextView(response);
     }
 
     @Override
-    public void onApiRequestResponse(JSONObject jsonObject) {
-        super.onApiRequestResponse(jsonObject.toString());
-        setToTextView(jsonObject.toString());
-    }
-
-
-    @Override
-    public void onApiRequestResponse(String response, int tempId) {
-        super.onApiRequestResponse(response);
+    public void onApiStringRequestResponse(NetworkResponse networkResponse, String response, int tempId) {
+        super.onApiStringRequestResponse(networkResponse, response);
         setToTextView(response);
     }
 
+    // JSON =======================================================================================
     @Override
-    public void onApiRequestResponse(JSONObject jsonObject, int tempId) {
-        super.onApiRequestResponse(jsonObject.toString());
-        setToTextView(jsonObject.toString());
+    public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response) {
+        super.onApiJSONRequestResponse(networkResponse, response);
     }
 
     @Override
-    public void onApiRequestError(String message) {
-        super.onApiRequestError(message);
+    public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response, int tempId) {
+        super.onApiJSONRequestResponse(networkResponse, response);
+
+    }
+
+    // Error ======================================================================================
+    @Override
+    public void onApiRequestError(NetworkResponse networkResponse, String message) {
+        super.onApiRequestError(networkResponse, message);
         setToTextView(message);
     }
 
     @Override
-    public void onApiRequestError(String message, int tempId) {
-        super.onApiRequestError(message);
+    public void onApiRequestError(NetworkResponse networkResponse, String message, int tempId) {
+        super.onApiRequestError(networkResponse, message);
         setToTextView(message);
     }
 

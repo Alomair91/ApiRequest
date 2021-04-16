@@ -6,13 +6,23 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.Map;
 
 
 public class VolleyStringRequest extends StringRequest {
+    public interface ResponseListener {
+        void onNetworkResponse(NetworkResponse response);
+    }
+
+    private VolleyJSONRequest.ResponseListener responseListener = null;
 
     private Map<String, String> headers;
     private Map<String, String> params = new Hashtable<>();
@@ -23,19 +33,27 @@ public class VolleyStringRequest extends StringRequest {
     /**
      * Creates a new request.
      *
-     * @param method the HTTP method to use
-     * @param url URL to fetch the JSON from
-     *     parameters will be posted along with request.
-     * @param listener Listener to receive the JSON response
+     * @param method        the HTTP method to use
+     * @param url           URL to fetch the JSON from
+     *                      parameters will be posted along with request.
+     * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs,String tag, Map<String, String> headers) {
+    public VolleyStringRequest(
+            int method,
+            String url,
+            Response.Listener<String> listener,
+            Response.ErrorListener errorListener,
+            int initialTimeoutMs,
+            String tag,
+            Map<String, String> headers,
+            VolleyJSONRequest.ResponseListener responseListener) {
         super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
         this.headers = headers;
+        this.responseListener = responseListener;
 
         setDefaults();
     }
@@ -43,20 +61,29 @@ public class VolleyStringRequest extends StringRequest {
     /**
      * Creates a new request.
      *
-     * @param method the HTTP method to use
-     * @param url URL to fetch the JSON from
-     *     parameters will be posted along with request.
-     * @param listener Listener to receive the JSON response
+     * @param method        the HTTP method to use
+     * @param url           URL to fetch the JSON from
+     *                      parameters will be posted along with request.
+     * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener
-            , int initialTimeoutMs,String tag, Map<String, String> headers, Map<String, String> params) {
+    public VolleyStringRequest(
+            int method,
+            String url,
+            Response.Listener<String> listener,
+            Response.ErrorListener errorListener,
+            int initialTimeoutMs,
+            String tag,
+            Map<String, String> headers,
+            Map<String, String> params,
+            VolleyJSONRequest.ResponseListener responseListener) {
         super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
         this.headers = headers;
         this.params = params;
+        this.responseListener = responseListener;
 
         setDefaults();
     }
@@ -73,14 +100,14 @@ public class VolleyStringRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() /*throws AuthFailureError*/ {
-        if(headers == null)
+        if (headers == null)
             headers = new Hashtable<>();
         return headers;
     }
 
     @Override
     protected Map<String, String> getParams()/* throws AuthFailureError*/ {
-        if(params == null)
+        if (params == null)
             params = new Hashtable<>();
         return params;
     }
@@ -99,6 +126,10 @@ public class VolleyStringRequest extends StringRequest {
         return super.parseNetworkError(volleyError);
     }
 
+    @Override
+    protected String getParamsEncoding() {
+        return "UTF-8";
+    }
 
     @Override
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
@@ -112,6 +143,17 @@ public class VolleyStringRequest extends StringRequest {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        return super.parseNetworkResponse(response);
+        if(responseListener != null){
+            responseListener.onNetworkResponse(response);
+        }
+        try {
+            String utf8String = new String(response.data, StandardCharsets.UTF_8);
+            return Response.success(utf8String, HttpHeaderParser.parseCacheHeaders(response));
+        } catch (Exception e) {
+            // log error
+            //return Response.error(new ParseError(e));
+            return super.parseNetworkResponse(response);
+        }
+       // return super.parseNetworkResponse(response);
     }
 }
