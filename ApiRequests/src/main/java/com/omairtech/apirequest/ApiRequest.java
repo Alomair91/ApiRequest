@@ -58,7 +58,7 @@ public class ApiRequest extends BaseHelper {
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
-                      HashMap<String, String> header) {
+                      Map<String, String> header) {
 
         setActivity(activity);
         setListener(listener);
@@ -67,24 +67,12 @@ public class ApiRequest extends BaseHelper {
         setHeaderParams(header);
     }
 
-    public ApiRequest(Activity activity,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> body) {
-
-        setActivity(activity);
-        setListener(listener);
-        setRequestType(requestType);
-        setUrl(url);
-        setBodyParams(body);
-    }
 
     public ApiRequest(Activity activity,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
-                      HashMap<String, String> header,
+                      Map<String, String> header,
                       Map<String, String> body) {
 
         setActivity(activity);
@@ -99,7 +87,7 @@ public class ApiRequest extends BaseHelper {
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
-                      HashMap<String, String> header,
+                      Map<String, String> header,
                       Map<String, String> body,
                       boolean showProgress) {
         setActivity(activity);
@@ -116,7 +104,7 @@ public class ApiRequest extends BaseHelper {
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
-                      HashMap<String, String> header,
+                      Map<String, String> header,
                       Map<String, String> body,
                       boolean showProgress,
                       int tempId) {
@@ -135,7 +123,7 @@ public class ApiRequest extends BaseHelper {
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
-                      HashMap<String, String> header,
+                      Map<String, String> header,
                       Map<String, String> body,
                       int initialTimeoutMs) {
         setActivity(activity);
