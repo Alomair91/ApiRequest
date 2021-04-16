@@ -9,14 +9,14 @@ public interface ApiRequestListener {
     default void onApiStringRequestResponse(NetworkResponse networkResponse,String response) {
     }
     default void onApiStringRequestResponse(NetworkResponse networkResponse, String response, int tempId) {
-        onApiStringRequestResponse(networkResponse,response,tempId);
+        onApiStringRequestResponse(networkResponse,response);
     }
 
 
     default void onApiJSONRequestResponse(NetworkResponse networkResponse,JSONObject response) {
     }
     default void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response, int tempId) {
-        onApiJSONRequestResponse(networkResponse,response,tempId);
+        onApiJSONRequestResponse(networkResponse,response);
     }
 
 
