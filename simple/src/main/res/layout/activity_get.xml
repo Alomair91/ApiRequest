@@ -1,42 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    android:padding="40dp"
-    tools:context=".activity.GetActivity">
+    tools:context=".view.activities.GetActivity">
 
-    <LinearLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.omairtech.simple.view_model.activities.GetVM" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:padding="40dp">
 
-        <EditText
-            android:id="@+id/txt_url"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="API Url"
-            android:inputType="textUri"
-            tools:ignore="Autofill,HardcodedText" />
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:onClick="onBtnClicked"
-            android:text="GO"
-            android:textSize="12sp"
-            tools:ignore="ButtonStyle,HardcodedText" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@={vm.url}"
+                android:hint="API Url"
+                android:inputType="textUri"
+                tools:ignore="Autofill,HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:onClick="@{v -> vm.onBtnClicked(v)}"
+                android:text="GO"
+                android:textSize="12sp"
+                tools:ignore="ButtonStyle,HardcodedText" />
 
 
-        <TextView
-            android:id="@+id/txt_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{vm.result}"
+                android:layout_margin="10dp" />
+        </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>

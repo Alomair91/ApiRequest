@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.activities.MainActivity">
+    tools:context=".view.activities.GetActivity">
 
     <data>
 
@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.omairtech.simple.view_model.activities.MainVM" />
+            type="com.omairtech.simple.view_model.activities.PutVM" />
 
     </data>
 
@@ -23,44 +23,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical">
 
-            <Button
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:onClick="@{vm::getEx}"
-                android:text="GET"
-                android:textSize="18sp"
-                tools:ignore="ButtonStyle,HardcodedText" />
+                android:text="@={vm.url}"
+                android:hint="API Url"
+                android:inputType="textUri"
+                tools:ignore="Autofill,HardcodedText" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:onClick="@{vm::postEx}"
-                android:text="POST"
-                android:textSize="18sp"
+                android:onClick="@{v -> vm.onBtnClicked(v)}"
+                android:text="GO"
+                android:textSize="12sp"
                 tools:ignore="ButtonStyle,HardcodedText" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:onClick="@{vm::putEx}"
-                android:text="PUT"
-                android:textSize="18sp"
-                tools:ignore="ButtonStyle,HardcodedText" />
 
-            <Button
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:onClick="@{vm::deleteEx}"
-                android:text="DELETE"
-                android:textSize="18sp"
-                tools:ignore="ButtonStyle,HardcodedText" />
+                android:text="@{vm.result}"
+                android:layout_margin="10dp" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

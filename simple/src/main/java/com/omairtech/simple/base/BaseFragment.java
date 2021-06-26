@@ -6,9 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.omairtech.apirequest.model.NetworkResponse;
-import com.omairtech.simple.Util.ApiLink;
+import com.omairtech.simple.util.ApiLink;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
-import com.omairtech.simple.Util.Utils;
+import com.omairtech.simple.util.Utils;
 
 import org.json.JSONObject;
 

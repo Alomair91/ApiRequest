@@ -2,12 +2,16 @@ package com.omairtech.apirequest;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
 import com.omairtech.apirequest.Base.BaseHelper;
@@ -16,51 +20,48 @@ import com.omairtech.apirequest.enums.ResponseType;
 import com.omairtech.apirequest.volley.VolleyJSONRequest;
 import com.omairtech.apirequest.volley.VolleyStringRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class ApiRequest extends BaseHelper {
 
-    public ApiRequest(Activity activity) {
-        setActivity(activity);
+    public ApiRequest(Context context) {
+        setContext(context);
     }
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
     }
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
     }
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
     }
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
                       Map<String, String> header) {
 
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
@@ -68,14 +69,14 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
                       Map<String, String> header,
                       Map<String, String> body) {
 
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
@@ -83,14 +84,14 @@ public class ApiRequest extends BaseHelper {
         setBodyParams(body);
     }
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
                       Map<String, String> header,
                       Map<String, String> body,
                       boolean showProgress) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
@@ -100,7 +101,7 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
@@ -108,7 +109,7 @@ public class ApiRequest extends BaseHelper {
                       Map<String, String> body,
                       boolean showProgress,
                       int tempId) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
@@ -119,14 +120,14 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Activity activity,
+    public ApiRequest(Context context,
                       ApiRequestListener listener,
                       RequestType requestType,
                       String url,
                       Map<String, String> header,
                       Map<String, String> body,
                       int initialTimeoutMs) {
-        setActivity(activity);
+        setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
@@ -180,8 +181,16 @@ public class ApiRequest extends BaseHelper {
     public RequestQueue getRequestQueue() {
         if (requestQueue == null)
             //Creating a Request Queue
-            requestQueue = Volley.newRequestQueue(getActivity());
+            requestQueue = Volley.newRequestQueue(getContext());
         return requestQueue;
+    }
+
+    private void getImage(String url, ImageView imageView) {
+        ImageRequest request = new ImageRequest(url, imageView::setImageBitmap
+                , 0, 0, null, Bitmap.Config.RGB_565
+                , error -> imageView.setImageResource(R.drawable.ic_baseline_broken_image_24));
+
+        getRequestQueue().add(request);
     }
 
     private void getDataFromServer() {
@@ -251,9 +260,10 @@ public class ApiRequest extends BaseHelper {
         }
     }
 
+
     private void getStringResponse(String response) {
         try {
-            Log.e("R: ",response.substring(response.length() - 100));
+            showLogMessage( response.substring(response.length() - 100));
             String data = response;
             //delete backslashes ( \ ) :
             data = data.replaceAll("[\\\\]{1}[\"]{1}", "\"");
@@ -261,7 +271,7 @@ public class ApiRequest extends BaseHelper {
             data = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
             if (response.lastIndexOf("}") != response.length())
                 response = response + "}";
-            Log.e("R: ",response.substring(response.length() - 100));
+            showLogMessage( response.substring(response.length() - 100));
             JSONObject json = new JSONObject(data);
             setSuccessResponse(response, json);
         } catch (Exception e) {
@@ -337,12 +347,12 @@ public class ApiRequest extends BaseHelper {
                     getTempId());
         }
 
-        String message = getActivity().getString(R.string.connection_error_please_try_again);
+        String message = getContext().getString(R.string.connection_error_please_try_again);
         if (volleyError.networkResponse != null && volleyError.getMessage() != null)
             message = String.format(Locale.ENGLISH, "%d: %s", volleyError.networkResponse.statusCode, volleyError.getMessage());
 
-        if (isShowTryAgainIfFails() && !getActivity().isFinishing()) {
-            new AlertDialog.Builder(getActivity())
+        if (isShowTryAgainIfFails() && isActivityRunning()) {
+            new AlertDialog.Builder(getContext())
                     .setMessage(message)
                     .setCancelable(false)
                     .setPositiveButton(R.string.connect, (dialog, which) -> execute())

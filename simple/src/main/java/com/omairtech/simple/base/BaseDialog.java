@@ -5,9 +5,9 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import com.omairtech.apirequest.model.NetworkResponse;
-import com.omairtech.simple.Util.ApiLink;
+import com.omairtech.simple.util.ApiLink;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
-import com.omairtech.simple.Util.Utils;
+import com.omairtech.simple.util.Utils;
 
 import org.json.JSONObject;
 
