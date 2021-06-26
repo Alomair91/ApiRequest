@@ -32,6 +32,11 @@ public class ApiRequest2<T> extends BaseHelper {
         setContext(context);
     }
 
+    public ApiRequest2(Context context,Class<T> model) {
+        setContext(context);
+        setModel(model);
+    }
+
     public ApiRequest2(Context context,
                        String url, ImageView imageView) {
         setContext(context);

@@ -94,9 +94,9 @@ public class BaseHelper {
     }
 
     public String getUrl() {
-        if(url.toLowerCase().startsWith("http"))
-            return url;
-        return getBaseUrl() + url;
+        if(!url.toLowerCase().startsWith("http") && !getBaseUrl().equals(""))
+            return getBaseUrl() + url;
+        return url;
     }
 
     /**
