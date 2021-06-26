@@ -32,6 +32,12 @@ public class ApiRequest extends BaseHelper {
     }
 
     public ApiRequest(Context context,
+                      String url, ImageView imageView) {
+        setContext(context);
+        getImage(url,imageView);
+    }
+
+    public ApiRequest(Context context,
                       ApiRequestListener listener) {
         setContext(context);
         setListener(listener);
@@ -189,7 +195,6 @@ public class ApiRequest extends BaseHelper {
         ImageRequest request = new ImageRequest(url, imageView::setImageBitmap
                 , 0, 0, null, Bitmap.Config.RGB_565
                 , error -> imageView.setImageResource(R.drawable.ic_baseline_broken_image_24));
-
         getRequestQueue().add(request);
     }
 
