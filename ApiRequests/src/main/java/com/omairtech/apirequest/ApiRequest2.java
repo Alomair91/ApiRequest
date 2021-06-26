@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.omairtech.apirequest.Base.BaseHelper;
 import com.omairtech.apirequest.Interface.ApiRequestListener;
 import com.omairtech.apirequest.enums.RequestType;
@@ -23,47 +24,49 @@ import org.json.JSONObject;
 import java.util.Locale;
 import java.util.Map;
 
-public class ApiRequest extends BaseHelper {
+public class ApiRequest2<T> extends BaseHelper {
 
-    public ApiRequest(Context context) {
+
+
+    public ApiRequest2(Context context) {
         setContext(context);
     }
 
-    public ApiRequest(Context context,
-                      String url, ImageView imageView) {
+    public ApiRequest2(Context context,
+                       String url, ImageView imageView) {
         setContext(context);
-        getImage(url,imageView);
+        getImage(url, imageView);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener) {
         setContext(context);
         setListener(listener);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType) {
         setContext(context);
         setListener(listener);
         setRequestType(requestType);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url) {
         setContext(context);
         setListener(listener);
         setRequestType(requestType);
         setUrl(url);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url,
+                       Map<String, String> header) {
 
         setContext(context);
         setListener(listener);
@@ -73,12 +76,12 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url,
+                       Map<String, String> header,
+                       Map<String, String> body) {
 
         setContext(context);
         setListener(listener);
@@ -88,13 +91,13 @@ public class ApiRequest extends BaseHelper {
         setBodyParams(body);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      boolean showProgress) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url,
+                       Map<String, String> header,
+                       Map<String, String> body,
+                       boolean showProgress) {
         setContext(context);
         setListener(listener);
         setRequestType(requestType);
@@ -105,14 +108,14 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      boolean showProgress,
-                      int tempId) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url,
+                       Map<String, String> header,
+                       Map<String, String> body,
+                       boolean showProgress,
+                       int tempId) {
         setContext(context);
         setListener(listener);
         setRequestType(requestType);
@@ -124,13 +127,13 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      int initialTimeoutMs) {
+    public ApiRequest2(Context context,
+                       ApiRequestListener listener,
+                       RequestType requestType,
+                       String url,
+                       Map<String, String> header,
+                       Map<String, String> body,
+                       int initialTimeoutMs) {
         setContext(context);
         setListener(listener);
         setRequestType(requestType);
@@ -201,7 +204,7 @@ public class ApiRequest extends BaseHelper {
             VolleyStringRequest stringRequest = new VolleyStringRequest(
                     Request.Method.GET,
                     getUrl(),
-                    this::getStringResponse,
+                    this::setStringResponse,
                     this::setErrorResponse,
                     getInitialTimeoutMs(),
                     getTag(),
@@ -238,7 +241,7 @@ public class ApiRequest extends BaseHelper {
             VolleyStringRequest stringRequest = new VolleyStringRequest(
                     requestMethod,
                     getUrl(),
-                    this::getStringResponse,
+                    this::setStringResponse,
                     this::setErrorResponse,
                     getInitialTimeoutMs(),
                     getTag(),
@@ -264,9 +267,9 @@ public class ApiRequest extends BaseHelper {
     }
 
 
-    private void getStringResponse(String response) {
+    private void setStringResponse(String response) {
         try {
-            showLogMessage( response.substring(response.length() - 100));
+            showLogMessage(response.substring(response.length() - 100));
             String data = response;
             //delete backslashes ( \ ) :
             data = data.replaceAll("[\\\\]{1}[\"]{1}", "\"");
@@ -274,7 +277,7 @@ public class ApiRequest extends BaseHelper {
             data = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
             if (response.lastIndexOf("}") != response.length())
                 response = response + "}";
-            showLogMessage( response.substring(response.length() - 100));
+            showLogMessage(response.substring(response.length() - 100));
             JSONObject json = new JSONObject(data);
             setSuccessResponse(response, json);
         } catch (Exception e) {
@@ -332,6 +335,14 @@ public class ApiRequest extends BaseHelper {
                         new com.omairtech.apirequest.model.NetworkResponse(response),
                         jsonObject,
                         getTempId());
+
+
+            if (model != null)
+                getListener().onApiRequestResponse(
+                        new com.omairtech.apirequest.model.NetworkResponse(response),
+                        fromJson(jsonObject != null && jsonObject.length() > 0? jsonObject.toString() : string),
+                        getTempId());
+
         }
     }
 
@@ -362,5 +373,20 @@ public class ApiRequest extends BaseHelper {
                     .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .show();
         }
+    }
+
+
+    private Class<T> model;
+    public void setModel(Class<T> model) {
+        this.model = model;
+    }
+    public Class<T> getModel() {
+        return model;
+    }
+    public T fromJson(String response) {
+        T list = new Gson().fromJson(response, getModel());
+        showLogMessage(response);
+        showLogMessage("T: " + list);
+        return list;
     }
 }

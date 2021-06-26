@@ -39,6 +39,8 @@ public class BaseHelper {
     private boolean setPUTAndDELETEAsPOST = false;
 
 
+
+
     public void setContext(Context context) {
         this.context = context;
     }
@@ -92,6 +94,8 @@ public class BaseHelper {
     }
 
     public String getUrl() {
+        if(url.toLowerCase().startsWith("http"))
+            return url;
         return getBaseUrl() + url;
     }
 

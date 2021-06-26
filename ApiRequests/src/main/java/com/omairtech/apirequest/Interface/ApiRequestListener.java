@@ -19,6 +19,12 @@ public interface ApiRequestListener {
         onApiJSONRequestResponse(networkResponse,response);
     }
 
+    default <T> void onApiRequestResponse(NetworkResponse networkResponse,T response) {
+    }
+    default <T> void onApiRequestResponse(NetworkResponse networkResponse, T response, int tempId) {
+        onApiRequestResponse(networkResponse,response);
+    }
+
 
     default void onApiRequestError(NetworkResponse networkResponse, String message) {
     }
