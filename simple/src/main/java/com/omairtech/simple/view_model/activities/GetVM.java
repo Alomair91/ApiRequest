@@ -105,7 +105,7 @@ public class GetVM extends BaseViewModel {
     public <T> void onApiRequestResponse(NetworkResponse networkResponse, T response) {
         super.onApiRequestResponse(networkResponse, response);
         if(response instanceof UserMobel){
-            Log.d("TAG", "Url: " + ((UserMobel) response).getUrl());
+            util.showLogMessage("TAG", "Url: " + ((UserMobel) response).getUrl());
         }
     }
 
@@ -113,7 +113,7 @@ public class GetVM extends BaseViewModel {
     public <T> void onApiRequestResponse(NetworkResponse networkResponse, T response, int tempId) {
         super.onApiRequestResponse(networkResponse, response,tempId);
         if(response instanceof UserMobel){
-            Log.d("TAG", "Url: " + ((UserMobel) response).getUrl());
+            util.showLogMessage("TAG", "Url: " + ((UserMobel) response).getUrl());
         }
     }
 

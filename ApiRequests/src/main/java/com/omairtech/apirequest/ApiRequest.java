@@ -98,8 +98,10 @@ public class ApiRequest extends BaseHelper {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(map -> {
-                    Log.d(TAG, "upStream: " + map.toString());
-                    Log.d(TAG, "upStream Thread: " + Thread.currentThread().getName());
+                    if (isShowLog()) {
+                        showLog( "upStream: " + map.toString());
+                        showLog( "upStream Thread: " + Thread.currentThread().getName());
+                    }
                 })
                 .subscribe(new Observer<Map<String, Object>>() {
                     @Override
@@ -109,8 +111,9 @@ public class ApiRequest extends BaseHelper {
 
                     @Override
                     public void onNext(@NonNull Map<String, Object> map) {
-                        Log.d(TAG, "downStream Thread: " + Thread.currentThread().getName());
-
+                        if (isShowLog()) {
+                            showLog("downStream Thread: " + Thread.currentThread().getName());
+                        }
                         if (map.containsKey(VolleyRequest.TAG_ERROR)) {
                             errorResponse(response, (String) map.get(VolleyRequest.TAG_ERROR));
                         } else {
