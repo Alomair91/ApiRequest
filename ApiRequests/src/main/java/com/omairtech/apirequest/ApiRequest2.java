@@ -29,31 +29,33 @@ public class ApiRequest2<T> extends ApiRequest {
 
     public ApiRequest2(Context context) {
         super(context);
-        setContext(context);
     }
 
     public ApiRequest2(Context context, Class<T> model) {
         super(context);
-        setContext(context);
         setModel(model);
     }
 
-    public ApiRequest2(Context context, RequestType requestType, String url) {
+    public ApiRequest2(Context context, Class<T> model, RequestType requestType, String url) {
         super(context, requestType, url);
+        setModel(model);
     }
 
-    public ApiRequest2(Context context, RequestType requestType, String url, ApiRequestListener listener) {
+    public ApiRequest2(Context context, Class<T> model, RequestType requestType, String url, ApiRequestListener listener) {
         super(context, requestType, url, listener);
+        setModel(model);
     }
 
-    public ApiRequest2(Context context, RequestType requestType, String url, ApiRequestListener listener,
+    public ApiRequest2(Context context, Class<T> model, RequestType requestType, String url, ApiRequestListener listener,
                        Map<String, String> body) {
         super(context, requestType, url, listener, body);
+        setModel(model);
     }
 
-    public ApiRequest2(Context context, RequestType requestType, String url, ApiRequestListener listener,
+    public ApiRequest2(Context context, Class<T> model, RequestType requestType, String url, ApiRequestListener listener,
                        Map<String, String> header, Map<String, String> body) {
         super(context, requestType, url, listener, header, body);
+        setModel(model);
     }
 
 
