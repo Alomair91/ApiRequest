@@ -1,7 +1,7 @@
 Android ApiRequest
 -------
 
-- Helper library written in Java language to dealing with SQLite database in Android Studio.
+- Helper library written in Java language to dealing with APIs in Android Studio.
 
 - This library facilitates dealing with APIs for developers who have many requests to connect to the server and fetch or save data on the server.
 
