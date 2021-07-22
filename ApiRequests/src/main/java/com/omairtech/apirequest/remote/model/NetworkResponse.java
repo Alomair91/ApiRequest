@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.omairtech.apirequest.model;
+package com.omairtech.apirequest.remote.model;
 
 import androidx.annotation.Nullable;
 
@@ -22,7 +22,6 @@ import com.android.volley.Header;
 import com.android.volley.Network;
 import com.android.volley.Request;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;

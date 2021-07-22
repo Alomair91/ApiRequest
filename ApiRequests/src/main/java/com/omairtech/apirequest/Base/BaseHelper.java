@@ -1,30 +1,29 @@
 package com.omairtech.apirequest.Base;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
 import com.omairtech.apirequest.ApiRequest;
-import com.omairtech.apirequest.Interface.ApiRequestListener;
-import com.omairtech.apirequest.enums.InitialTimeout;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.preference.Preference;
+import com.omairtech.apirequest.util.Interface.ApiRequestListener;
+import com.omairtech.apirequest.util.enums.InitialTimeout;
+import com.omairtech.apirequest.util.enums.RequestType;
+import com.omairtech.apirequest.util.enums.ResponseType;
+import com.omairtech.apirequest.util.preference.Preference;
 
 import java.util.Hashtable;
 import java.util.Map;
 
 public class BaseHelper {
-    public static final String LOG = ApiRequest.class.getSimpleName();
+    public static final String TAG = ApiRequest.class.getSimpleName();
 
     private Context context;
-    private ApiRequestListener listener;
     private RequestType requestType = RequestType.GET;
-
     private String url;
+
     private Map<String, String> headerParams = new Hashtable<>();
     private Map<String, String> bodyParams = new Hashtable<>();
+    private ApiRequestListener listener;
+
 
     private int tempId = 0;
     private String tag;
@@ -38,6 +37,9 @@ public class BaseHelper {
 
     private boolean setPUTAndDELETEAsPOST = false;
 
+    public BaseHelper(Context context){
+        this.context = context;
+    }
 
 
 
@@ -49,18 +51,6 @@ public class BaseHelper {
         return context;
     }
 
-    /**
-     * Callback interface to get response or error in your activity
-     *
-     * @param listener interface
-     */
-    public void setListener(ApiRequestListener listener) {
-        this.listener = listener;
-    }
-
-    public ApiRequestListener getListener() {
-        return listener;
-    }
 
     /**
      * HTTP Request type
@@ -74,6 +64,7 @@ public class BaseHelper {
     public RequestType getRequestType() {
         return requestType;
     }
+
 
     /**
      * @param baseUrl String
@@ -98,6 +89,8 @@ public class BaseHelper {
             return getBaseUrl() + url;
         return url;
     }
+
+
 
     /**
      * Header Params
@@ -124,6 +117,19 @@ public class BaseHelper {
 
     public Map<String, String> getBodyParams() {
         return bodyParams;
+    }
+
+    /**
+     * Callback interface to get response or error in your activity
+     *
+     * @param listener interface
+     */
+    public void setListener(ApiRequestListener listener) {
+        this.listener = listener;
+    }
+
+    public ApiRequestListener getListener() {
+        return listener;
     }
 
 
@@ -239,46 +245,7 @@ public class BaseHelper {
      *
      * @param message String
      */
-    protected void showLogMessage(String message) {
-        Log.e(BaseHelper.LOG, message + " ");
-    }
-
-    private ProgressDialog progressDialog;
-
-    protected void showProgressDialog(int messageId) {
-        if (!isActivityRunning()) {
-            return;
-        }
-
-        if (!isShowProgress()) {
-            // User doesn't need to show progress dialog
-            return;
-        }
-
-        if (progressDialog != null && progressDialog.isShowing()) {
-            return;
-        }
-
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setCancelable(false);
-        }
-
-        progressDialog.setMessage(context.getString(messageId));
-        progressDialog.show();
-    }
-
-    protected void hideProgressDialog() {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.dismiss();
-    }
-
-    protected boolean isActivityRunning() {
-        if (getContext() instanceof Activity) {
-            return !((Activity) getContext()).isFinishing();
-        }
-        return false;
+    public void showLog(String message) {
+        Log.e(BaseHelper.TAG, message + " ");
     }
 }

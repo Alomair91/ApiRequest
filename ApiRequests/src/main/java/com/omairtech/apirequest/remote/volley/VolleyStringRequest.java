@@ -1,31 +1,24 @@
-package com.omairtech.apirequest.volley;
-
-import android.util.Log;
+package com.omairtech.apirequest.remote.volley;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
-import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.omairtech.apirequest.util.Interface.ResponseListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.Map;
 
 
-public class VolleyJSONRequest extends JsonObjectRequest {
+public class VolleyStringRequest extends StringRequest {
 
-    public interface ResponseListener {
-        void onNetworkResponse(NetworkResponse response);
-    }
 
-    private ResponseListener responseListener = null;
+    private final ResponseListener responseListener;
 
     private Map<String, String> headers;
     private Map<String, String> params = new Hashtable<>();
@@ -42,16 +35,16 @@ public class VolleyJSONRequest extends JsonObjectRequest {
      * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyJSONRequest(
+    public VolleyStringRequest(
             int method,
             String url,
-            Response.Listener<JSONObject> listener,
+            Response.Listener<String> listener,
             Response.ErrorListener errorListener,
             int initialTimeoutMs,
-            String tag, Map<String,
-            String> headers,
+            String tag,
+            Map<String, String> headers,
             ResponseListener responseListener) {
-        super(method, url, new JSONObject(), listener, errorListener);
+        super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
@@ -67,21 +60,20 @@ public class VolleyJSONRequest extends JsonObjectRequest {
      * @param method        the HTTP method to use
      * @param url           URL to fetch the JSON from
      *                      parameters will be posted along with request.
-     * @param params        A {@link JSONObject} to post with the request. Null indicates no
-     *                      parameters will be posted along with request.
      * @param listener      Listener to receive the JSON response
      * @param errorListener Error listener, or null to ignore errors.
      */
-    public VolleyJSONRequest(
+    public VolleyStringRequest(
             int method,
             String url,
-            Response.Listener<JSONObject> listener,
+            Response.Listener<String> listener,
             Response.ErrorListener errorListener,
             int initialTimeoutMs,
-            String tag, Map<String, String> headers,
+            String tag,
+            Map<String, String> headers,
             Map<String, String> params,
             ResponseListener responseListener) {
-        super(method, url, new JSONObject(params != null ? params : new Hashtable<>()), listener, errorListener);
+        super(method, url, listener, errorListener);
 
         this.initialTimeoutMs = initialTimeoutMs;
         this.tag = tag;
@@ -116,23 +108,27 @@ public class VolleyJSONRequest extends JsonObjectRequest {
         return params;
     }
 
-//    @Override
-//    public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-//        retryPolicy = new DefaultRetryPolicy(
-//                Helper.initialTimeoutMs1,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-//        return super.setRetryPolicy(retryPolicy);
-//    }
+    @Override
+    public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
+        retryPolicy = new DefaultRetryPolicy(
+                initialTimeoutMs,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        return super.setRetryPolicy(retryPolicy);
+    }
 
     @Override
     protected VolleyError parseNetworkError(VolleyError volleyError) {
         return super.parseNetworkError(volleyError);
     }
 
+    @Override
+    protected String getParamsEncoding() {
+        return "UTF-8";
+    }
 
     @Override
-    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+    protected Response<String> parseNetworkResponse(NetworkResponse response) {
         // Map<String, String> responseHeaders = response.headers;
 //        try {
 //            String expire = response.headers.get("expires");
@@ -143,17 +139,17 @@ public class VolleyJSONRequest extends JsonObjectRequest {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        if (responseListener != null) {
+        if(responseListener != null){
             responseListener.onNetworkResponse(response);
         }
         try {
             String utf8String = new String(response.data, StandardCharsets.UTF_8);
-            return Response.success(new JSONObject(utf8String), HttpHeaderParser.parseCacheHeaders(response));
-        } catch (JSONException e) {
+            return Response.success(utf8String, HttpHeaderParser.parseCacheHeaders(response));
+        } catch (Exception e) {
             // log error
             //return Response.error(new ParseError(e));
             return super.parseNetworkResponse(response);
         }
-        //return super.parseNetworkResponse(response);
+       // return super.parseNetworkResponse(response);
     }
 }

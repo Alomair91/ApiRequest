@@ -1,4 +1,4 @@
-package com.omairtech.apirequest.enums;
+package com.omairtech.apirequest.util.enums;
 
 public enum ResponseType {
     JSON,

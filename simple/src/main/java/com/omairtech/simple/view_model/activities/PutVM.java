@@ -3,13 +3,11 @@ package com.omairtech.simple.view_model.activities;
 import android.content.Context;
 import android.view.View;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.omairtech.apirequest.ApiRequest;
-import com.omairtech.apirequest.enums.InitialTimeout;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.model.NetworkResponse;
+import com.omairtech.apirequest.util.enums.InitialTimeout;
+import com.omairtech.apirequest.util.enums.RequestType;
+import com.omairtech.apirequest.util.enums.ResponseType;
+import com.omairtech.apirequest.remote.model.NetworkResponse;
 import com.omairtech.simple.base.BaseViewModel;
 
 import org.json.JSONObject;

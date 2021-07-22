@@ -1,366 +1,181 @@
 package com.omairtech.apirequest;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
 import com.omairtech.apirequest.Base.BaseHelper;
-import com.omairtech.apirequest.Interface.ApiRequestListener;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.volley.VolleyJSONRequest;
-import com.omairtech.apirequest.volley.VolleyStringRequest;
+import com.omairtech.apirequest.remote.request.LoadImage;
+import com.omairtech.apirequest.remote.volley.VolleyRequest;
+import com.omairtech.apirequest.util.Interface.ApiRequestListener;
+import com.omairtech.apirequest.util.Interface.ApiSuccessListener;
+import com.omairtech.apirequest.util.enums.RequestType;
+import com.omairtech.apirequest.view.AlertDialog;
+import com.omairtech.apirequest.view.ProgressDialog;
 
 import org.json.JSONObject;
 
-import java.util.Locale;
 import java.util.Map;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ApiRequest extends BaseHelper {
 
     public ApiRequest(Context context) {
+        super(context);
         setContext(context);
     }
 
-    public ApiRequest(Context context,
-                      String url, ImageView imageView) {
-        setContext(context);
-        getImage(url,imageView);
-    }
-
-    public ApiRequest(Context context,
-                      ApiRequestListener listener) {
-        setContext(context);
-        setListener(listener);
-    }
-
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType) {
-        setContext(context);
-        setListener(listener);
-        setRequestType(requestType);
-    }
-
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url) {
-        setContext(context);
-        setListener(listener);
+    public ApiRequest(Context context, RequestType requestType, String url) {
+        super(context);
         setRequestType(requestType);
         setUrl(url);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header) {
-
-        setContext(context);
-        setListener(listener);
+    public ApiRequest(Context context, RequestType requestType, String url, ApiRequestListener listener) {
+        super(context);
         setRequestType(requestType);
         setUrl(url);
-        setHeaderParams(header);
+        setListener(listener);
     }
 
+    public ApiRequest(Context context, RequestType requestType, String url, ApiRequestListener listener,
+                      Map<String, String> body) {
+        super(context);
+        setRequestType(requestType);
+        setUrl(url);
+        setListener(listener);
+        setBodyParams(body);
+    }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
+    public ApiRequest(Context context, RequestType requestType, String url, ApiRequestListener listener,
                       Map<String, String> header,
                       Map<String, String> body) {
-
-        setContext(context);
-        setListener(listener);
+        super(context);
         setRequestType(requestType);
         setUrl(url);
+        setListener(listener);
         setHeaderParams(header);
         setBodyParams(body);
     }
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      boolean showProgress) {
-        setContext(context);
-        setListener(listener);
-        setRequestType(requestType);
-        setUrl(url);
-        setHeaderParams(header);
-        setBodyParams(body);
-        setShowProgressDialog(showProgress);
+
+    public ApiRequest(Context context, String url, ImageView imageView) {
+        super(context);
+        new LoadImage(context, url, imageView);
     }
 
 
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      boolean showProgress,
-                      int tempId) {
-        setContext(context);
-        setListener(listener);
-        setRequestType(requestType);
-        setUrl(url);
-        setHeaderParams(header);
-        setBodyParams(body);
-        setShowProgressDialog(showProgress);
-        setTempId(tempId);
-    }
-
-
-    public ApiRequest(Context context,
-                      ApiRequestListener listener,
-                      RequestType requestType,
-                      String url,
-                      Map<String, String> header,
-                      Map<String, String> body,
-                      int initialTimeoutMs) {
-        setContext(context);
-        setListener(listener);
-        setRequestType(requestType);
-        setUrl(url);
-        setHeaderParams(header);
-        setBodyParams(body);
-        setInitialTimeoutMs(initialTimeoutMs);
-    }
+    public ApiSuccessListener apiSuccessListener;
 
     public void execute() {
-        if (isShowLog()) {
-            showLogMessage("Request type: " + getRequestType());
-            showLogMessage("Response type: " + getResponseType());
-            showLogMessage("URL: " + getUrl());
-            showLogMessage("Header params: " + getHeaderParams().toString());
-            showLogMessage("Body params: " + getBodyParams().toString());
-        }
-
-        showProgressDialog(R.string.loading);
-        switch (getRequestType()) {
-            case POST:
-            case PUT:
-            case DELETE:
-                if (isSetPUTAndDELETEAsPOST()) {
-                    Map<String, String> bodyParams = getBodyParams();
-                    switch (getRequestType()) {
-                        case POST:
-                            bodyParams.put("_method", "post");
-                            break;
-                        case PUT:
-                            bodyParams.put("_method", "put");
-                            break;
-                        case DELETE:
-                            bodyParams.put("_method", "delete");
-                            break;
-                    }
-                    setBodyParams(bodyParams);
-                }
-                postDataToServer();
-                break;
-            case GET:
-            default:
-                getDataFromServer();
-                break;
-        }
+        request();
     }
 
-
-    private static RequestQueue requestQueue;
-    private NetworkResponse response;
-
-    public RequestQueue getRequestQueue() {
-        if (requestQueue == null)
-            //Creating a Request Queue
-            requestQueue = Volley.newRequestQueue(getContext());
-        return requestQueue;
+    public void execute(ApiSuccessListener apiSuccessListener) {
+        this.apiSuccessListener = apiSuccessListener;
+        request();
     }
 
-    private void getImage(String url, ImageView imageView) {
-        ImageRequest request = new ImageRequest(url, imageView::setImageBitmap
-                , 0, 0, null, Bitmap.Config.RGB_565
-                , error -> imageView.setImageResource(R.drawable.ic_baseline_broken_image_24));
-        getRequestQueue().add(request);
-    }
+    public NetworkResponse response;
 
-    private void getDataFromServer() {
-        if (getResponseType() == ResponseType.STRING) {
-            VolleyStringRequest stringRequest = new VolleyStringRequest(
-                    Request.Method.GET,
-                    getUrl(),
-                    this::getStringResponse,
-                    this::setErrorResponse,
-                    getInitialTimeoutMs(),
-                    getTag(),
-                    getHeaderParams(),
-                    response -> this.response = response);
-            //Adding request to the queue
-            getRequestQueue().add(stringRequest);
-
-        } else {
-            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(
-                    Request.Method.GET,
-                    getUrl(),
-                    this::setJSONResponse,
-                    this::setErrorResponse,
-                    getInitialTimeoutMs(),
-                    getTag(),
-                    getHeaderParams(),
-                    response -> this.response = response);
-            //Adding request to the queue
-            getRequestQueue().add(jsonRequest);
-        }
-    }
-
-    private void postDataToServer() {
-        int requestMethod = Request.Method.POST;
-        if (isSetPUTAndDELETEAsPOST()) {
-            if (getRequestType() == RequestType.PUT)
-                requestMethod = Request.Method.PUT;
-            else if (getRequestType() == RequestType.DELETE)
-                requestMethod = Request.Method.DELETE;
-        }
-
-        if (getResponseType() == ResponseType.STRING) {
-            VolleyStringRequest stringRequest = new VolleyStringRequest(
-                    requestMethod,
-                    getUrl(),
-                    this::getStringResponse,
-                    this::setErrorResponse,
-                    getInitialTimeoutMs(),
-                    getTag(),
-                    getHeaderParams(),
-                    getBodyParams(),
-                    response -> this.response = response);
-            //Adding request to the queue
-            getRequestQueue().add(stringRequest);
-        } else {
-            VolleyJSONRequest jsonRequest = new VolleyJSONRequest(
-                    requestMethod,
-                    getUrl(),
-                    this::setJSONResponse,
-                    this::setErrorResponse,
-                    getInitialTimeoutMs(),
-                    getTag(),
-                    getHeaderParams(),
-                    getBodyParams(),
-                    response -> this.response = response);
-            //Adding request to the queue
-            getRequestQueue().add(jsonRequest);
-        }
-    }
-
-
-    private void getStringResponse(String response) {
-        try {
-            showLogMessage( response.substring(response.length() - 100));
-            String data = response;
-            //delete backslashes ( \ ) :
-            data = data.replaceAll("[\\\\]{1}[\"]{1}", "\"");
-            //delete first and last double quotation ( " ) :
-            data = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
-            if (response.lastIndexOf("}") != response.length())
-                response = response + "}";
-            showLogMessage( response.substring(response.length() - 100));
-            JSONObject json = new JSONObject(data);
-            setSuccessResponse(response, json);
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                response = response.replace("\\\\", "");
-                if (response.lastIndexOf("}") != response.length())
-                    response = response + "}";
-                setSuccessResponse(response, new JSONObject((response.substring(response.indexOf("{")))));
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                response = response + "}";
-                setSuccessResponse(response, null);
-            }
-//            NetworkResponse networkResponse = new NetworkResponse(409, null,false, 0,new ArrayList<>());
-//            VolleyError volleyError = new VolleyError(networkResponse);
-//            volleyError.initCause(e);
-//            setErrorResponse(volleyError);
-        }
-    }
-
-    private void setJSONResponse(JSONObject jsonObject) {
-        setSuccessResponse(jsonObject.toString(), jsonObject);
-    }
-
-    private void setSuccessResponse(String string, JSONObject jsonObject) {
+    private void request() {
         if (isShowProgress())
-            hideProgressDialog();
+            ProgressDialog.getInstance().show(getContext(), R.string.loading);
+
+        Observable
+                .create((ObservableOnSubscribe<Map<String, Object>>) emitter -> new VolleyRequest(ApiRequest.this, (networkResponse, map) -> {
+                    ApiRequest.this.response = networkResponse;
+                    emitter.onNext(map);
+                }))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(map -> {
+                    Log.d(TAG, "upStream: " + map.toString());
+                    Log.d(TAG, "upStream Thread: " + Thread.currentThread().getName());
+                })
+                .subscribe(new Observer<Map<String, Object>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Map<String, Object> map) {
+                        Log.d(TAG, "downStream Thread: " + Thread.currentThread().getName());
+
+                        if (map.containsKey(VolleyRequest.TAG_ERROR)) {
+                            errorResponse(response, (String) map.get(VolleyRequest.TAG_ERROR));
+                        } else {
+                            successResponse(response,
+                                    (String) map.get(VolleyRequest.TAG_STRING),
+                                    (JSONObject) map.get(VolleyRequest.TAG_JSON));
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void successResponse(NetworkResponse response, String string, JSONObject jsonObject) {
+        if (isShowProgress())
+            ProgressDialog.getInstance().hide();
 
         if (getListener() != null) {
             if (response == null) {
-                response = new NetworkResponse(200, null, true, 0, null);
+                response = new NetworkResponse(200, null, true,
+                        0, null);
             }
 
-            if (isShowLog()) {
-                if (response != null) {
-                    showLogMessage("statusCode: " + response.statusCode);
-                    showLogMessage("data: " + response.data.toString());
-                    showLogMessage("notModified: " + response.notModified);
-                    showLogMessage("networkTimeMs: " + response.networkTimeMs);
-                    showLogMessage("headers: " + response.headers.toString());
-                    showLogMessage("allHeaders: " + response.allHeaders);
-                }
-                showLogMessage("response: " + string);
+            com.omairtech.apirequest.remote.model.NetworkResponse networkResponse
+                    = new com.omairtech.apirequest.remote.model.NetworkResponse(response);
+
+            // Model response
+            if (apiSuccessListener != null)
+                apiSuccessListener.onResponse(networkResponse, string, jsonObject);
+
+            // JSON response
+            if (jsonObject != null && jsonObject.length() > 0) {
+                getListener().onApiJSONRequestResponse(networkResponse, jsonObject);
+                getListener().onApiJSONRequestResponse(networkResponse, jsonObject, getTempId());
             }
 
-            if (string != null && string.length() > 0)
-                getListener().onApiStringRequestResponse(
-                        new com.omairtech.apirequest.model.NetworkResponse(response),
-                        string,
-                        getTempId());
-
-            if (jsonObject != null && jsonObject.length() > 0)
-                getListener().onApiJSONRequestResponse(
-                        new com.omairtech.apirequest.model.NetworkResponse(response),
-                        jsonObject,
-                        getTempId());
+            // String response
+            if (string != null && string.length() > 0) {
+                getListener().onApiStringRequestResponse(networkResponse, string);
+                getListener().onApiStringRequestResponse(networkResponse, string, getTempId());
+            }
         }
     }
 
-
-    private void setErrorResponse(VolleyError volleyError) {
-        if (isShowLog())
-            showLogMessage(volleyError.getMessage());
-
+    public void errorResponse(NetworkResponse response, String error) {
         if (isShowProgress())
-            hideProgressDialog();
+            ProgressDialog.getInstance().hide();
 
         if (getListener() != null) {
-            getListener().onApiRequestError(
-                    new com.omairtech.apirequest.model.NetworkResponse(volleyError.networkResponse),
-                    volleyError.toString(),
-                    getTempId());
+            com.omairtech.apirequest.remote.model.NetworkResponse networkResponse
+                    = new com.omairtech.apirequest.remote.model.NetworkResponse(response);
+            getListener().onApiRequestError(networkResponse, error);
+            getListener().onApiRequestError(networkResponse, error, getTempId());
         }
 
-        String message = getContext().getString(R.string.connection_error_please_try_again);
-        if (volleyError.networkResponse != null && volleyError.getMessage() != null)
-            message = String.format(Locale.ENGLISH, "%d: %s", volleyError.networkResponse.statusCode, volleyError.getMessage());
-
-        if (isShowTryAgainIfFails() && isActivityRunning()) {
-            new AlertDialog.Builder(getContext())
-                    .setMessage(message)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.connect, (dialog, which) -> execute())
-                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
-                    .show();
+        if (isShowTryAgainIfFails()) {
+            AlertDialog.getInstance().show(getContext(), error, tryAgain -> execute());
         }
     }
 }

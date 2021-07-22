@@ -1,24 +1,14 @@
 package com.omairtech.simple.view_model.activities;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.omairtech.apirequest.ApiRequest;
-import com.omairtech.apirequest.enums.InitialTimeout;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.model.NetworkResponse;
-import com.omairtech.simple.R;
-import com.omairtech.simple.base.BaseActivity;
+import com.omairtech.apirequest.util.enums.InitialTimeout;
+import com.omairtech.apirequest.util.enums.RequestType;
+import com.omairtech.apirequest.util.enums.ResponseType;
+import com.omairtech.apirequest.remote.model.NetworkResponse;
 import com.omairtech.simple.base.BaseViewModel;
-import com.omairtech.simple.databinding.ActivityGetBinding;
 
 import org.json.JSONObject;
 

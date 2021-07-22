@@ -1,17 +1,16 @@
 package com.omairtech.simple.base;
 
-import android.app.Activity;
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.omairtech.apirequest.ApiRequest;
-import com.omairtech.apirequest.Interface.ApiRequestListener;
-import com.omairtech.apirequest.enums.InitialTimeout;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.model.NetworkResponse;
+import com.omairtech.apirequest.util.Interface.ApiRequestListener;
+import com.omairtech.apirequest.util.enums.InitialTimeout;
+import com.omairtech.apirequest.util.enums.RequestType;
+import com.omairtech.apirequest.util.enums.ResponseType;
+import com.omairtech.apirequest.remote.model.NetworkResponse;
 import com.omairtech.simple.BuildConfig;
 import com.omairtech.simple.util.ApiLink;
 import com.omairtech.simple.util.Utils;
@@ -106,27 +105,40 @@ public class BaseViewModel extends ViewModel implements ApiRequestListener {
     // String Response =====================================================================================
     @Override
     public void onApiStringRequestResponse(NetworkResponse networkResponse, String response) {
-        util.showLogMessage("onApiStringRequestResponse", networkResponse.statusCode +": "+ response);
+        util.showLogMessage("onApiStringRequestResponse 1", networkResponse.statusCode +": "+ response);
         setToTextView(networkResponse.statusCode,response);
     }
 
     @Override
     public void onApiStringRequestResponse(NetworkResponse networkResponse, String response, int tempId) {
-        util.showLogMessage("onApiStringRequestResponse", networkResponse.statusCode +": "+ response);
+        util.showLogMessage("onApiStringRequestResponse 2", networkResponse.statusCode +": "+ response);
         setToTextView(networkResponse.statusCode,response);
     }
 
     // JSON Response =======================================================================================
     @Override
     public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response) {
-        util.showLogMessage("onApiJSONRequestResponse", networkResponse.statusCode +": "+ response.toString());
+        util.showLogMessage("onApiJSONRequestResponse 1", networkResponse.statusCode +": "+ response.toString());
         setToTextView(networkResponse.statusCode,response.toString());
     }
 
     @Override
     public void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response, int tempId) {
-        util.showLogMessage("onApiJSONRequestResponse", networkResponse.statusCode +": "+ response.toString());
+        util.showLogMessage("onApiJSONRequestResponse 2", networkResponse.statusCode +": "+ response.toString());
         setToTextView(networkResponse.statusCode,response.toString());
+    }
+
+    @Override
+    public <T> void onApiRequestResponse(NetworkResponse networkResponse, T response) {
+        util.showLogMessage("onApiRequestResponse 1", networkResponse.statusCode +": "+ response.toString());
+        setToTextView(networkResponse.statusCode,response.toString());
+    }
+
+    @Override
+    public <T> void onApiRequestResponse(NetworkResponse networkResponse, T response, int tempId) {
+        util.showLogMessage("onApiRequestResponse 2", networkResponse.statusCode +": "+ response.toString());
+        setToTextView(networkResponse.statusCode,response.toString());
+
     }
 
     // Error Response ======================================================================================

@@ -1,27 +1,15 @@
 package com.omairtech.simple.view.activities;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.omairtech.apirequest.ApiRequest;
-import com.omairtech.apirequest.enums.InitialTimeout;
-import com.omairtech.apirequest.enums.RequestType;
-import com.omairtech.apirequest.enums.ResponseType;
-import com.omairtech.apirequest.model.NetworkResponse;
+import com.omairtech.apirequest.remote.model.NetworkResponse;
 import com.omairtech.simple.R;
 import com.omairtech.simple.base.BaseActivity;
 import com.omairtech.simple.databinding.ActivityPostBinding;
 import com.omairtech.simple.view_model.activities.PostVM;
-
-import org.json.JSONObject;
-
-import java.util.Hashtable;
-import java.util.Map;
 
 public class PostActivity extends BaseActivity{
 
