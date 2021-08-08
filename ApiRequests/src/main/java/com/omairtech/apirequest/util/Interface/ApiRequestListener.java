@@ -11,7 +11,7 @@ public interface ApiRequestListener {
     }
 
     default void onApiStringRequestResponse(NetworkResponse networkResponse, String response, int tempId) {
-        onApiStringRequestResponse(networkResponse, response);
+        //onApiStringRequestResponse(networkResponse, response);
     }
 
 
@@ -19,14 +19,14 @@ public interface ApiRequestListener {
     }
 
     default void onApiJSONRequestResponse(NetworkResponse networkResponse, JSONObject response, int tempId) {
-        onApiJSONRequestResponse(networkResponse, response);
+        //onApiJSONRequestResponse(networkResponse, response);
     }
 
     default <T> void onApiRequestResponse(NetworkResponse networkResponse, T response) {
     }
 
     default <T> void onApiRequestResponse(NetworkResponse networkResponse, T response, int tempId) {
-        onApiRequestResponse(networkResponse, response);
+        //onApiRequestResponse(networkResponse, response);
     }
 
 
@@ -34,6 +34,6 @@ public interface ApiRequestListener {
     }
 
     default void onApiRequestError(NetworkResponse networkResponse, String message, int tempId) {
-        onApiRequestError(networkResponse, message);
+        //onApiRequestError(networkResponse, message);
     }
 }
